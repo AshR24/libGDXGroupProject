@@ -9,9 +9,9 @@
   </data>
  </layer>
  <objectgroup name="BOUNDARY">
-  <object id="17" x="0" y="0" width="2560" height="704"/>
+  <object id="17" x="-64" y="0" width="2624" height="704"/>
  </objectgroup>
  <objectgroup name="PLAYER">
-  <object id="19" gid="3" x="32" y="359" width="64" height="64"/>
+  <object id="19" gid="3" x="64" y="320" width="64" height="64"/>
  </objectgroup>
 </map>
