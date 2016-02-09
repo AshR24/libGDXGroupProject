@@ -2,6 +2,8 @@ package com.game.Misc;
 
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.File;
+
 /**
  * Created by Ash on 08/02/2016.
  */
@@ -19,8 +21,6 @@ public class Vars {
     public static final float PPM = 100f; // Pixels per meter
     public static final float TILESIZE = 64f;
     public static final Vector2 SCROLLSPEED = new Vector2(150, 0);
-
-
 
     // Filter bits
     public static final short BIT_RED = 2;

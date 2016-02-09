@@ -1,7 +1,9 @@
 package com.game.desktop;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.game.Game;
 import com.game.Misc.Vars;
 
@@ -13,5 +15,6 @@ public class DesktopLauncher {
 		config.width = Vars.SCREEN_WIDTH;
 		config.height = Vars.SCREEN_HEIGHT;
 		config.resizable = Vars.RESIZABLE;
+		config.addIcon("spritesheets/icon.jpg", Files.FileType.Internal);
 	}
 }
