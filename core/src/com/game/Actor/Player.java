@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.game.Misc.Box2dUtils;
 import com.game.Misc.Vars;
 
 import static com.game.Misc.Vars.PPM;
@@ -12,6 +13,8 @@ import static com.game.Misc.Vars.PPM;
  * Created by Ash on 08/02/2016.
  */
 public class Player extends Base {
+
+    Vector2 curVel;
 
     // TODO, remove
     private Texture texture = new Texture("textures/player.png");
@@ -28,26 +31,12 @@ public class Player extends Base {
     public Player(World world, Vector2 pos, Vector2 size, Colours curColour) {
         super(world, pos, size, "", curColour);
         curAction = Action.IDLE;
-    }
 
-    @Override
-    public void makeBody() {
-        bd = new BodyDef();
-        bd.type = BodyDef.BodyType.DynamicBody;
-        bd.position.set(pos.x / PPM, pos.y / PPM);
-
-        body = world.createBody(bd);
-
-        FixtureDef fd = new FixtureDef();
-
-        CircleShape circle = new CircleShape();
-        circle.setRadius((size.x / 2) / PPM);
-        fd.shape = circle;
-
-        fd.density = 1f;
-        fd.friction = 0.9f;
-
-        body.createFixture(fd).setUserData("PLAYER");
+        body = Box2dUtils.makeBody(world,
+                BodyDef.BodyType.DynamicBody,
+                pos
+        );
+        Box2dUtils.makeCircle(body, size.x, "PLAYER", false);
     }
 
     public void update(float dt)
@@ -58,7 +47,7 @@ public class Player extends Base {
             curAction = Action.FALLING;
         }
 
-        Vector2 curVel = body.getLinearVelocity();
+        curVel = body.getLinearVelocity();
         curVel.x = Vars.SCROLLSPEED.x * dt;
         body.setLinearVelocity(curVel);
         pos = body.getPosition();

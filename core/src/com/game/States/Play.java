@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 public class Play extends State {
 
     // TODO, remove
-    public boolean isDebug = false;
+    public boolean isDebug = true;
 
     // Physics related
     private World world;
@@ -104,7 +105,7 @@ public class Play extends State {
 
         cameraUpdate(dt);
 
-        b2dCam.position.x = player.getPos().x / PPM;
+        b2dCam.position.x = player.getPos().x;
         b2dCam.update();
 
         player.update(dt);
@@ -117,12 +118,13 @@ public class Play extends State {
 
         if(!isDebug)
         {
-            tmr.setView(cam);
-            tmr.render();
-
             sb.begin();
+
             player.render(sb);
             sb.end();
+
+            tmr.setView(cam);
+            tmr.render();
         }
         else
         {
@@ -151,7 +153,7 @@ public class Play extends State {
         Vector3 camPos = cam.position;
 
         camPos.x = cam.position.x +  ((player.getPos().x * PPM) - cam.position.x) * .2f;
-        camPos.y = cam.position.y +  ((player.getPos().y * PPM) - cam.position.y) * .2f;
+        //camPos.y = cam.position.y +  ((player.getPos().y * PPM) - cam.position.y) * .2f;
         cam.position.set(camPos);
         cam.update();
     }

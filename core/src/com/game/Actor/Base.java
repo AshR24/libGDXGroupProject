@@ -37,11 +37,7 @@ public abstract class Base {
         this.size = size;
         this.bodyType = bodyType;
         this.curColour = curColour;
-
-        makeBody();
     }
-
-    protected abstract void makeBody();
 
     // Accessors
     public Vector2 getPos() { return body.getPosition(); }
