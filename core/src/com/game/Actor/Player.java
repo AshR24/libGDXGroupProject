@@ -64,7 +64,7 @@ public class Player extends Base {
     {
         if(curAction == Action.JUMPING)
         {
-            body.applyForceToCenter(new Vector2(0, 100), true);
+            body.applyForceToCenter(new Vector2(0, 65), true);
             curAction = Action.FALLING;
         }
 

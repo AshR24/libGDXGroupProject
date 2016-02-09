@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="8" tilewidth="64" tileheight="64" nextobjectid="23">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="8" tilewidth="64" tileheight="64" nextobjectid="21">
  <tileset firstgid="1" name="platformSet" tilewidth="64" tileheight="64" tilecount="3" columns="3">
   <image source="../spritesheets/platformSet.png" width="192" height="64"/>
  </tileset>
  <layer name="PLATFORM" width="50" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF1ABMSJgYwAjEzGj0QAHGAbZ/qANmPBifHmTAyIA/Hkg1nxBgwoLxAUYsGNld+PQh06S4DZvZ2NxAbYArTCi1j5TygR6AnHSLDgAqVwCE
+   eJxjYBgFo2B4ACY62MGIhAmpo5Z91ABMaBgZMEMxslpS3IXNvMEMBrv7hhIAAE/AACE=
   </data>
  </layer>
  <objectgroup name="BOUNDARY">
@@ -13,10 +13,5 @@
  </objectgroup>
  <objectgroup name="PLAYER">
   <object id="19" gid="3" x="64" y="320" width="64" height="64"/>
- </objectgroup>
- <objectgroup name="test">
-  <object id="22" x="0" y="512">
-   <polyline points="0,0 1664,-512 3200,0 1664,0 0,0"/>
-  </object>
  </objectgroup>
 </map>
