@@ -3,6 +3,7 @@ package com.game.States;
 import static com.game.Misc.Vars.PPM;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -40,6 +41,8 @@ public class Play extends State {
     private OrthogonalTiledMapRenderer tmr;
 
     ArrayList<Platform> platforms = new ArrayList<Platform>();
+
+    private Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jumping.mp3"));
 
     public Play(StateManager sm) {
         super(sm);
@@ -110,6 +113,7 @@ public class Play extends State {
     public void handleInput() {
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
         {
+            jumpSound.play();
             player.jump();
         }
 
@@ -125,7 +129,7 @@ public class Play extends State {
     {
         player = new Player(world, new Vector2(500, 500), new Vector2(60, 60), Base.Colours.NONE);
 
-        tileMap = new TmxMapLoader().load("levels/level1.tmx");
+        tileMap = new TmxMapLoader().load("levels/level2.tmx");
         tmr = new OrthogonalTiledMapRenderer(tileMap);
 
         TiledMapTileLayer layer = (TiledMapTileLayer)tileMap.getLayers().get("PLATFORM");
