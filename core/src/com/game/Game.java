@@ -25,7 +25,6 @@ public class Game extends ApplicationAdapter {
 
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, Vars.SCREEN_WIDTH, Vars.SCREEN_HEIGHT);
-
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, Vars.SCREEN_WIDTH, Vars.SCREEN_HEIGHT);
 
@@ -41,6 +40,7 @@ public class Game extends ApplicationAdapter {
 		accum += Gdx.graphics.getDeltaTime();
 		while (accum >= Vars.STEP) {
 			accum -= Vars.STEP;
+			sm.handleInput();
 			sm.update(Vars.STEP);
 			sm.render();
 		}

@@ -1,5 +1,7 @@
 package com.game.Misc;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * Created by Ash on 08/02/2016.
  */
@@ -13,4 +15,15 @@ public class Vars {
 
     // Physics related
     public static final float STEP =  1 / FRAMERATE;
+    public static final Vector2 GRAVITY = new Vector2(0, -9.81f);
+    public static final float PPM = 100f; // Pixels per meter
+    public static final float TILESIZE = 64f;
+    public static final Vector2 SCROLLSPEED = new Vector2(150, 0);
+
+
+
+    // Filter bits
+    public static final short BIT_RED = 2;
+    public static final short BIT_GREEN = 4;
+    public static final short BIT_BLUE = 8;
 }

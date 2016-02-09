@@ -3,7 +3,6 @@ package com.game.States;
 import com.game.Game;
 
 import java.util.HashMap;
-import java.util.Stack;
 
 /**
  * Created by Ash on 08/02/2016.
@@ -11,7 +10,6 @@ import java.util.Stack;
 public class StateManager {
     private Game game;
 
-    //private Stack<State> states;
     private HashMap<States, State> states = new HashMap<States, State>();
 
     private States currentState;
@@ -27,6 +25,7 @@ public class StateManager {
         this.game = game;
         states.put(States.MENU, new Menu(this));
         states.put(States.PLAY, new Play(this));
+
         setState(States.PLAY); // TODO, set to MENU
     }
 

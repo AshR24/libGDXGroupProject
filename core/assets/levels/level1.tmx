@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="8" tilewidth="64" tileheight="64" nextobjectid="21">
+ <tileset firstgid="1" name="platformSet" tilewidth="64" tileheight="64" tilecount="3" columns="3">
+  <image source="../spritesheets/platformSet.png" width="192" height="64"/>
+ </tileset>
+ <layer name="PLATFORM" width="40" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF+AATEh4sgBGKRwpgxoPx6UEGjAz4w41Y85mwYHyAEQtGtg+fPmSaWPNpAXD5daikQXzpBwC0fABt
+  </data>
+ </layer>
+ <objectgroup name="BOUNDARY">
+  <object id="17" x="0" y="0" width="2560" height="704"/>
+ </objectgroup>
+ <objectgroup name="PLAYER">
+  <object id="19" gid="3" x="0" y="384" width="64" height="64"/>
+ </objectgroup>
+</map>
