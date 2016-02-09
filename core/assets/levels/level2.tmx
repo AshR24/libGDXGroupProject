@@ -5,7 +5,7 @@
  </tileset>
  <layer name="PLATFORM" width="50" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2B4ACYK9TMSqQaGKTWLGEANc5iwYGTADMXI6klxFzbzyAWU6B1oOyhNf0MRAABepAAp
+   eJxjYBgFo2B4ACYK9TMSqQaGKTWLFECJeUxYMDJghmJk9aS4B5t55AJK9A60HZSmv6EIAF6cACk=
   </data>
  </layer>
  <objectgroup name="PLAYER">
