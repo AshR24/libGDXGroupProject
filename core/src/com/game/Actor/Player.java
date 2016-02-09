@@ -1,9 +1,10 @@
 package com.game.Actor;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.game.Misc.Vars;
-import javafx.scene.shape.Circle;
 
 import static com.game.Misc.Vars.PPM;
 
@@ -11,6 +12,9 @@ import static com.game.Misc.Vars.PPM;
  * Created by Ash on 08/02/2016.
  */
 public class Player extends Base {
+
+    // TODO, remove
+    private Texture texture = new Texture("textures/player.png");
 
     private Action curAction;
     public enum Action
@@ -29,35 +33,21 @@ public class Player extends Base {
     @Override
     public void makeBody() {
         bd = new BodyDef();
-
-        if(bodyType.equals("STATIC")) { bd.type = BodyDef.BodyType.StaticBody; } // Doesn't move, isn't affected by forces
-        else if(bodyType.equals("KINEMATIC")) { bd.type = BodyDef.BodyType.KinematicBody; } // Can move, isn't affected by forces
-        else { bd.type = BodyDef.BodyType.DynamicBody; } // Can move, is affected by forces
+        bd.type = BodyDef.BodyType.DynamicBody;
         bd.position.set(pos.x / PPM, pos.y / PPM);
 
         body = world.createBody(bd);
-        //body.setFixedRotation(true);
 
         FixtureDef fd = new FixtureDef();
-        //PolygonShape polygon = new PolygonShape();
-        //polygon.setAsBox((size.x / 2) / PPM, (size.y / 2) / PPM);
-        //fd.shape = polygon;
 
         CircleShape circle = new CircleShape();
         circle.setRadius((size.x / 2) / PPM);
         fd.shape = circle;
 
         fd.density = 1f;
-        fd.restitution = 0f;
         fd.friction = 0.9f;
 
-        body.createFixture(fd).setUserData("player");
-
-        /*PolygonShape polygon = new PolygonShape();
-        polygon.setAsBox((size.x / 4) / PPM, (size.y / 4) / PPM, new Vector2(0, (size.y / -3) / PPM), 0);
-        fd.shape = polygon;
-        fd.isSensor = true;
-        body.createFixture(fd).setUserData("sensor");*/
+        body.createFixture(fd).setUserData("PLAYER");
     }
 
     public void update(float dt)
@@ -71,6 +61,16 @@ public class Player extends Base {
         Vector2 curVel = body.getLinearVelocity();
         curVel.x = Vars.SCROLLSPEED.x * dt;
         body.setLinearVelocity(curVel);
+        pos = body.getPosition();
+    }
+
+    public void render(SpriteBatch sb)
+    {
+        sb.draw(texture,
+                (pos.x * PPM) - size.x / 2,
+                (pos.y * PPM) - size.y / 2,
+                size.x,
+                size.y);
     }
 
     public void jump()
@@ -79,20 +79,6 @@ public class Player extends Base {
         {
             curAction = Action.JUMPING;
         }
-    }
-
-    public void moveLeft()
-    {
-        Vector2 vel = body.getLinearVelocity();
-        vel.x = -5f;
-        body.setLinearVelocity(vel);
-    }
-
-    public void moveRight()
-    {
-        Vector2 vel = body.getLinearVelocity();
-        vel.x = 5f;
-        body.setLinearVelocity(vel);
     }
 
     // Accessors

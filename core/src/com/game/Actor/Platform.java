@@ -29,24 +29,23 @@ public class Platform extends Base {
 
         FixtureDef fd = new FixtureDef();
 
-        /*ChainShape chain = new ChainShape();
-        Vector2[] v = new Vector2[3];
-        v[0] = new Vector2(
-                -TILESIZE / 2 / PPM, -TILESIZE / 2 / PPM);
-        v[1] = new Vector2(
-                -TILESIZE / 2 / PPM, TILESIZE / 2 / PPM);
-        v[2] = new Vector2(
-                TILESIZE / 2 / PPM, TILESIZE / 2 / PPM);
-        chain.createChain(v);
-        fd.shape = chain;*/
+        // Create the box (platform)
         PolygonShape polygon = new PolygonShape();
-        polygon.setAsBox((TILESIZE / 2) / PPM, (TILESIZE / 2) / PPM);
+        polygon.setAsBox(TILESIZE / 2 / PPM, TILESIZE / 2 / PPM);
         fd.shape = polygon;
-
-        fd.density = 1f;
-        fd.restitution = 0f;
-        fd.friction = 1f;
-
         body.createFixture(fd);
+
+        // Create a sensor used for jumping above each box
+        ChainShape chain = new ChainShape();
+        Vector2[] v = new Vector2[2];
+        v[0] = new Vector2(
+                (-TILESIZE / 2 + 5) / PPM, (TILESIZE / 2 + 5) / PPM);
+        v[1] = new Vector2(
+                (TILESIZE / 2 - 5) / PPM, (TILESIZE / 2 + 5) / PPM);
+        chain.createChain(v);
+        fd.shape = chain;
+        fd.isSensor = true;
+
+        body.createFixture(fd).setUserData("PLATFORM");
     }
 }
