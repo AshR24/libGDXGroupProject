@@ -5,15 +5,15 @@
  </tileset>
  <layer name="PLATFORM" width="50" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF1ABMSJgYwAjEzGj0QAHGAbZ/qANmPBifHmTAyIA/Hkg1nxBgwoLxAUYsGNld+PQh06S4DZvZ2NxAbYArTCi1j5TygR6AnHSLDgAqVwCE
+   eJztk8EKACAIQzX//5/rOEKWktGhHgxPy5kl8qmggSLokE31FprsH53xFYyIeRAVvofV+dmdNEcMdYS5mA/rLl6GarJ/OeLP3PVJsH/03bLsHTB3AJM=
   </data>
  </layer>
  <objectgroup name="PLAYER">
   <object id="19" gid="3" x="64" y="320" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="BOUNDARY">
-  <object id="23" x="-64" y="-128">
-   <polyline points="0,0 0,768 3392,768 3392,0 0,0"/>
+  <object id="23" x="0" y="-192">
+   <polyline points="0,0 0,1024 3328,1024 3328,0 0,0"/>
   </object>
  </objectgroup>
 </map>

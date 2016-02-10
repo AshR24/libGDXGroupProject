@@ -1,9 +1,14 @@
 package com.game.States;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.game.Managers.StateManager;
+
 /**
  * Created by Ash on 08/02/2016.
  */
 public class Menu extends State {
+
 
     public Menu(StateManager sm) {
         super(sm);
@@ -26,7 +31,10 @@ public class Menu extends State {
 
     @Override
     public void handleInput() {
-
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER))
+        {
+            sm.setState(StateManager.States.PLAY);
+        }
     }
 
     @Override

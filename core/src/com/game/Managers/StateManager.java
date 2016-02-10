@@ -1,6 +1,9 @@
-package com.game.States;
+package com.game.Managers;
 
-import com.game.Game;
+import com.game.App;
+import com.game.States.Menu;
+import com.game.States.Play;
+import com.game.States.State;
 
 import java.util.HashMap;
 
@@ -8,7 +11,8 @@ import java.util.HashMap;
  * Created by Ash on 08/02/2016.
  */
 public class StateManager {
-    private Game game;
+
+    protected final App app;
 
     private HashMap<States, State> states = new HashMap<States, State>();
 
@@ -20,13 +24,13 @@ public class StateManager {
         PLAY,
     }
 
-    public StateManager(Game game)
+    public StateManager(App app)
     {
-        this.game = game;
+        this.app = app;
         states.put(States.MENU, new Menu(this));
         states.put(States.PLAY, new Play(this));
 
-        setState(States.PLAY); // TODO, set to MENU
+        setState(States.MENU); // TODO, set to MENU
     }
 
     public void update(float dt)
@@ -50,7 +54,7 @@ public class StateManager {
     }
 
     // Accessors
-    public Game game() { return game; }
+    public App app() { return app; }
 
     // Mutators
     public void setState(States state)

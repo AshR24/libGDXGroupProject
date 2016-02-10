@@ -1,9 +1,7 @@
 package com.game.Actor;
 
-import static com.game.Misc.Vars.PPM;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.game.Misc.Vars;
 
 /**
  * Created by Ash on 08/02/2016.
