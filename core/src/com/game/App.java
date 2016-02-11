@@ -44,7 +44,6 @@ public class App extends Game {
 		// Create statemanager (Should always happen last)
 		//sm = new StateManager(this);
 		this.setScreen(new Loading(this));
-
 	}
 
 	@Override

@@ -27,5 +27,10 @@ public class Splash extends AbstractScreen {
         stage.draw();
     }
 
+    @Override
+    public void handleInput() {
+
+    }
+
 
 }

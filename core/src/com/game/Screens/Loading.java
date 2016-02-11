@@ -66,6 +66,11 @@ public class Loading extends AbstractScreen {
     }
 
     @Override
+    public void handleInput() {
+
+    }
+
+    @Override
     public void dispose() {
         super.dispose();
     }

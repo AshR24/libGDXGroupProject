@@ -53,10 +53,13 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void render(float dt) {
+        handleInput();
         update(dt);
         Gdx.gl.glClearColor(0, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
+
+    public abstract void handleInput();
 
     @Override
     public void resize(int width, int height) {
