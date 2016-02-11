@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Vars {
     // Application related
-    public static final String TITLE = "Group Project";
+    public static final String TITLE = "A Reckless Disregard for Mercy";
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
     public static final boolean RESIZABLE = false;
