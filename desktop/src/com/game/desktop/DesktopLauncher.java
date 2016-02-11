@@ -14,6 +14,7 @@ public class DesktopLauncher {
 		config.width = Vars.SCREEN_WIDTH;
 		config.height = Vars.SCREEN_HEIGHT;
 		config.resizable = Vars.RESIZABLE;
+		config.vSyncEnabled = Vars.VSYNC;
 		config.addIcon("spritesheets/icon.jpg", Files.FileType.Internal);
 		config.foregroundFPS = (int)Vars.FRAMERATE;
 		config.backgroundFPS = (int)Vars.FRAMERATE;

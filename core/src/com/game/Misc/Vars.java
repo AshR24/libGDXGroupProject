@@ -11,6 +11,7 @@ public class Vars {
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
     public static final boolean RESIZABLE = false;
+    public static final boolean VSYNC = true;
     public static final float FRAMERATE = 60;
 
     // Physics related
