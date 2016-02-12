@@ -1,13 +1,13 @@
-package com.game.Actor;
+package com.game.actor;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.game.Misc.Box2dUtils;
-import com.game.Misc.Vars;
+import com.game.misc.Box2dUtils;
+import com.game.misc.Vars;
 
-import static com.game.Misc.Vars.PPM;
+import static com.game.misc.Vars.PPM;
 
 /**
  * Created by Ash on 08/02/2016.

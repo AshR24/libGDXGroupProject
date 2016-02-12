@@ -1,9 +1,9 @@
-package com.game.Misc;
+package com.game.misc;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-import static com.game.Misc.Vars.PPM;
+import static com.game.misc.Vars.PPM;
 
 /**
  * Created by Ash on 09/02/2016.

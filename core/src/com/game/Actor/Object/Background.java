@@ -1,9 +1,9 @@
-package com.game.Actor.Object;
+package com.game.actor.object;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.game.Misc.Vars;
+import com.game.misc.Vars;
 
 /**
  * Created by Ash on 09/02/2016.

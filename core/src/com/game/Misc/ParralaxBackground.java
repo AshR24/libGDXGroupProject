@@ -1,7 +1,7 @@
-package com.game.Misc;
+package com.game.misc;
 
 import com.badlogic.gdx.math.Vector2;
-import com.game.Actor.Object.Background;
+import com.game.actor.object.Background;
 
 /**
  * Created by Ash on 09/02/2016.

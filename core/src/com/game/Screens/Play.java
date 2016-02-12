@@ -1,4 +1,4 @@
-package com.game.Screens;
+package com.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -17,16 +17,17 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.game.Actor.Base;
-import com.game.Actor.Platform;
-import com.game.Actor.Player;
+import com.game.actor.Base;
+import com.game.actor.Platform;
+import com.game.actor.Player;
 import com.game.App;
-import com.game.Misc.CameraUtils;
-import com.game.Misc.Vars;
+import com.game.managers.ScreenManager;
+import com.game.misc.CameraUtils;
+import com.game.misc.Vars;
 
 import java.util.ArrayList;
 
-import static com.game.Misc.Vars.PPM;
+import static com.game.misc.Vars.PPM;
 
 /**
  * Created by Ash on 11/02/2016.
@@ -51,10 +52,14 @@ public class Play extends AbstractScreen {
     private Player player;
     private ArrayList<Platform> platforms = new ArrayList<Platform>();
 
+    private int levelNumber;
+
     private Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jumping.mp3"));
 
-    public Play(App app) {
+    public Play(App app, int levelNumber) {
         super(app);
+
+        this.levelNumber = levelNumber;
 
         world = new World(new Vector2(0, Vars.GRAVITY.y), true);
         world.setContactListener(cl);
@@ -91,15 +96,14 @@ public class Play extends AbstractScreen {
     public void render(float dt) {
         super.render(dt);
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        sb.setProjectionMatrix(cam.combined);
+        app.sb.setProjectionMatrix(cam.combined);
 
         if(!isDebug)
         {
-            sb.begin();
-            assets.get("badaboom25.ttf", BitmapFont.class).draw(sb,"Press M to go back to menu",  0, 0);
-            player.render(sb);
-            sb.end();
+            app.sb.begin();
+            app.assets.get("badaboom25.ttf", BitmapFont.class).draw(app.sb,"Press M to go back to menu",  0, 0);
+            player.render(app.sb);
+            app.sb.end();
 
             tmr.setView(cam);
             tmr.render();
@@ -118,8 +122,7 @@ public class Play extends AbstractScreen {
             player.jump();
         }
 
-
-
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) { app.sm.setScreen(ScreenManager.Screen.MENU); }
         if(Gdx.input.isKeyJustPressed(Input.Keys.V)) { isDebug = !isDebug; }
     }
 
@@ -131,7 +134,7 @@ public class Play extends AbstractScreen {
 
     private void setupLevel()
     {
-        tileMap = new TmxMapLoader().load("levels/level1.tmx");
+        tileMap = new TmxMapLoader().load("levels/level" + levelNumber + ".tmx");
         tmr = new OrthogonalTiledMapRenderer(tileMap);
 
         MapProperties mapProp = tileMap.getProperties();

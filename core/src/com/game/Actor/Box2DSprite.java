@@ -1,4 +1,4 @@
-package com.game.Actor;
+package com.game.actor;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-import static com.game.Misc.Vars.PPM;
+import static com.game.misc.Vars.PPM;
 
 /**
  * Created by Ash on 09/02/2016.

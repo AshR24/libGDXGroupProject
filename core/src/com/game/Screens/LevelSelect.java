@@ -1,4 +1,4 @@
-package com.game.Screens;
+package com.game.screens;
 
 /**
  * Created by Ash on 11/02/2016.
