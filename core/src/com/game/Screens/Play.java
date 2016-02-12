@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
@@ -67,6 +68,9 @@ public class Play extends AbstractScreen {
     @Override
     public void show()
     {
+        super.show();
+
+
         setupLevel();
     }
 
@@ -93,7 +97,7 @@ public class Play extends AbstractScreen {
         if(!isDebug)
         {
             sb.begin();
-
+            assets.get("badaboom25.ttf", BitmapFont.class).draw(sb,"Press M to go back to menu",  0, 0);
             player.render(sb);
             sb.end();
 
@@ -113,6 +117,8 @@ public class Play extends AbstractScreen {
             //jumpSound.play(); //TODO, fix sound?
             player.jump();
         }
+
+
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.V)) { isDebug = !isDebug; }
     }

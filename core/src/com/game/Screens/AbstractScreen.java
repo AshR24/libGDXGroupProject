@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.game.App;
+import com.game.Misc.Vars;
 
 /**
  * Created by Ash on 11/02/2016.
@@ -37,8 +38,12 @@ public abstract class AbstractScreen implements Screen {
         this.app = app;
         sb = app.getSpriteBatch();
         sr = app.getSr();
-        cam = app.getCam();
-        hudCam = app.getHudCam();
+
+        cam = new OrthographicCamera();
+        cam.setToOrtho(false, Vars.SCREEN_WIDTH, Vars.SCREEN_HEIGHT);
+        hudCam = new OrthographicCamera();
+        hudCam.setToOrtho(false, Vars.SCREEN_WIDTH, Vars.SCREEN_HEIGHT);
+
         assets = app.getAssetManager();
         stage = new Stage();
     }
@@ -46,7 +51,7 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     public abstract void update(float dt);
