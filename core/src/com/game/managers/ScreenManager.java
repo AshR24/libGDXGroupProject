@@ -33,6 +33,7 @@ public class ScreenManager {
         screens.put(Screen.LOADING, new Loading(app));
         screens.put(Screen.MENU, new Menu(app));
         screens.put(Screen.LEADERBOARD, new Leaderboard(app));
+        screens.put(Screen.LEVELSELECT, new LevelSelect(app));
     }
 
     public void setPlayScreen(int levelNumber)

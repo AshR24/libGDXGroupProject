@@ -99,6 +99,7 @@ public class Loading extends AbstractScreen {
         app.assets.load("textures/badlogic.jpg", Texture.class);
         app.assets.load("textures/menuBackground.jpg", Texture.class);
         app.assets.load("textures/leaderboardBackground.jpg", Texture.class);
+        app.assets.load("textures/levelSelectBackground.jpg", Texture.class);
         app.assets.load("textures/position0.png", Texture.class);
         app.assets.load("textures/position1.png", Texture.class);
         app.assets.load("textures/position2.png", Texture.class);

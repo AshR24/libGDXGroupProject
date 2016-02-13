@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapProperties;
@@ -84,7 +85,7 @@ public class Play extends AbstractScreen {
         world.step(dt, 6, 2);
 
         CameraUtils.lerpToTarget(cam, player.getPos().scl(PPM).x, 0);
-        CameraUtils.lockOnTarget(b2dCam, player.getPos().x, player.getPos().y);
+        CameraUtils.lerpToTarget(b2dCam, player.getPos().x, player.getPos().y);
 
         Vector2 start = new Vector2(cam.viewportWidth / 2, cam.viewportHeight / 2);
         CameraUtils.setBoundary(cam, start, new Vector2(mapWidth * tileSize.x - start.x * 2, mapHeight * tileSize.y - start.y * 2));
@@ -101,7 +102,9 @@ public class Play extends AbstractScreen {
         if(!isDebug)
         {
             app.sb.begin();
-            app.assets.get("badaboom25.ttf", BitmapFont.class).draw(app.sb,"Press M to go back to menu",  0, 0);
+            app.sb.draw(app.assets.get("textures/position0.png", Texture.class), cam.position.x - cam.viewportWidth / 2, cam.position.y - cam.viewportHeight / 2);
+            app.sb.draw(app.assets.get("textures/position1.png", Texture.class), cam.position.x - cam.viewportWidth / 2, cam.position.y - (cam.viewportHeight / 2) + 75);
+            app.sb.draw(app.assets.get("textures/position2.png", Texture.class), cam.position.x - cam.viewportWidth / 2, cam.position.y - (cam.viewportHeight / 2) - 150);
             player.render(app.sb);
             app.sb.end();
 

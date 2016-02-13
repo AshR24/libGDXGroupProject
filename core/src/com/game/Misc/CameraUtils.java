@@ -9,15 +9,6 @@ import com.badlogic.gdx.math.Vector3;
  */
 public class CameraUtils {
 
-    public static void lockOnTarget(Camera cam, float tarX, float tarY)
-    {
-        Vector3 pos = cam.position;
-        pos.x = tarX;
-        pos.y = tarY;
-        cam.position.set(pos);
-        cam.update();
-    }
-
     public static void lerpToTarget(Camera cam, float tarX, float tarY)
     {
         Vector3 pos = cam.position;

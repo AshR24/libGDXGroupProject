@@ -33,7 +33,7 @@ public class Menu extends AbstractScreen {
         super(app);
         skin = new Skin();
 
-        buttonSize = new Vector2(128, 40);
+        buttonSize = new Vector2(50, 50);
     }
 
     @Override
@@ -81,18 +81,17 @@ public class Menu extends AbstractScreen {
     private void initButtons()
     {
         butPlay = new TextButton("Play", skin, "default");
-        butPlay.setPosition((stage.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 180);
+        butPlay.setPosition((stage.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 160);
         butPlay.setSize(buttonSize.x, buttonSize.y);
         butPlay.addListener(new ClickListener() {
             @Override
             public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                music.stop();
-                app.sm.setPlayScreen(1);
+                app.sm.setScreen(ScreenManager.Screen.LEVELSELECT);
             }
         });
 
         butLeaderboard = new TextButton("Leaderboard", skin, "default");
-        butLeaderboard.setPosition((stage.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 100);
+        butLeaderboard.setPosition((stage.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 80);
         butLeaderboard.setSize(buttonSize.x, buttonSize.y);
         butLeaderboard.addListener(new ClickListener() {
             @Override
@@ -102,7 +101,7 @@ public class Menu extends AbstractScreen {
         });
 
         butExit = new TextButton("Exit", skin, "default");
-        butExit.setPosition((stage.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 20);
+        butExit.setPosition((stage.getWidth() / 2) - buttonSize.x / 2, buttonSize.y);
         butExit.setSize(buttonSize.x, buttonSize.y);
         butExit.addListener(new ClickListener() {
             @Override
@@ -111,9 +110,9 @@ public class Menu extends AbstractScreen {
             }
         });
 
-        butPlay.addAction(sequence(alpha(0f), fadeIn(1f, Interpolation.pow2)));
-        butLeaderboard.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow2)));
-        butExit.addAction(sequence(alpha(0f), fadeIn(2f, Interpolation.pow2)));
+        //butPlay.addAction(sequence(alpha(0f), fadeIn(1f, Interpolation.pow2)));
+        //butLeaderboard.addAction(sequence(alpha(0f), fadeIn(1.5f, Interpolation.pow2)));
+        //butExit.addAction(sequence(alpha(0f), fadeIn(2f, Interpolation.pow2)));
 
         stage.addActor(butPlay);
         stage.addActor(butLeaderboard);
