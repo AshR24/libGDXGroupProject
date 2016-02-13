@@ -7,14 +7,15 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.game.managers.ScreenManager;
+import com.game.screens.AbstractScreen;
 import com.game.screens.Menu;
+import com.game.screens.Play;
 
 public class App extends Game {
 
 	// Managers
-	public AssetManager assets;
+	public static AssetManager assets;
 	public ScreenManager sm;
-
 
 	// Batches
 	public SpriteBatch sb;

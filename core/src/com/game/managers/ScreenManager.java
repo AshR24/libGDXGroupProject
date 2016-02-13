@@ -38,6 +38,7 @@ public class ScreenManager {
 
     public void setPlayScreen(int levelNumber)
     {
+
         // remove loaded level
         if(screens.get(Screen.PLAY) != null)
         {

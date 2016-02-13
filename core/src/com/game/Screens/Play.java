@@ -3,7 +3,6 @@ package com.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -18,14 +17,21 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.game.actor.Base;
 import com.game.actor.Platform;
 import com.game.actor.Player;
 import com.game.App;
 import com.game.managers.ScreenManager;
+import com.game.misc.Box2dUtils;
 import com.game.misc.CameraUtils;
 import com.game.misc.Vars;
 
+import javax.xml.soap.Text;
 import java.util.ArrayList;
 
 import static com.game.misc.Vars.PPM;
@@ -34,6 +40,8 @@ import static com.game.misc.Vars.PPM;
  * Created by Ash on 11/02/2016.
  */
 public class Play extends AbstractScreen {
+
+    private Skin skin;
 
     // TODO, remove
     public boolean isDebug = false;
@@ -53,12 +61,23 @@ public class Play extends AbstractScreen {
     private Player player;
     private ArrayList<Platform> platforms = new ArrayList<Platform>();
 
+    // Pause window
+    private boolean isPaused;
+    private Window pauseWindow;
+    private Image pauseBackground;
+    private Image pauseGlow;
+    private TextButton butContinue, butReset, butExit;
+    private Vector2 buttonSize;
+
+
     private int levelNumber;
 
     private Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jumping.mp3"));
 
     public Play(App app, int levelNumber) {
         super(app);
+
+        skin = new Skin();
 
         this.levelNumber = levelNumber;
 
@@ -69,6 +88,9 @@ public class Play extends AbstractScreen {
 
         b2dCam = new OrthographicCamera();
         b2dCam.setToOrtho(false, Vars.SCREEN_WIDTH / PPM, Vars.SCREEN_HEIGHT / PPM);
+
+        isPaused = false;
+        buttonSize = new Vector2(50, 50);
     }
 
     @Override
@@ -76,21 +98,36 @@ public class Play extends AbstractScreen {
     {
         super.show();
 
+        skin.add("default-font", app.assets.get("badaboom60.ttf", BitmapFont.class));
+        skin.load(Gdx.files.internal("spritesheets/uiskin.json"));
 
-        setupLevel();
+        initLevel();
+        initPauseWindow();
     }
 
     @Override
     public void update(float dt) {
-        world.step(dt, 6, 2);
+        if(!isPaused)
+        {
+            world.step(dt, 6, 2);
 
-        CameraUtils.lerpToTarget(cam, player.getPos().scl(PPM).x, 0);
-        CameraUtils.lerpToTarget(b2dCam, player.getPos().x, player.getPos().y);
+            CameraUtils.lerpToTarget(cam, player.getPos().scl(PPM).x, 0);
+            CameraUtils.lerpToTarget(b2dCam, player.getPos().x, player.getPos().y);
+            b2dCam.zoom = 5f;
 
-        Vector2 start = new Vector2(cam.viewportWidth / 2, cam.viewportHeight / 2);
-        CameraUtils.setBoundary(cam, start, new Vector2(mapWidth * tileSize.x - start.x * 2, mapHeight * tileSize.y - start.y * 2));
+            Vector2 start = new Vector2(cam.viewportWidth / 2, cam.viewportHeight / 2);
+            CameraUtils.setBoundary(cam, start, new Vector2(mapWidth * tileSize.x - start.x * 2, mapHeight * tileSize.y - start.y * 2));
 
-        player.update(dt);
+            player.update(dt);
+        }
+
+        if(pauseWindow.isVisible() != isPaused)
+        {
+            pauseWindow.setVisible(isPaused);
+            pauseGlow.setVisible(isPaused);
+        }
+
+        stage.act(dt);
     }
 
     @Override
@@ -115,6 +152,8 @@ public class Play extends AbstractScreen {
         {
             b2dr.render(world, b2dCam.combined);
         }
+
+        stage.draw();
     }
 
     @Override
@@ -125,7 +164,27 @@ public class Play extends AbstractScreen {
             player.jump();
         }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) { app.sm.setScreen(ScreenManager.Screen.MENU); }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+        {
+            isPaused = !isPaused;
+            System.out.println("isPaused: " + isPaused);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
+        {
+            player.setCurColour(Base.Colours.RED);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
+        {
+            player.setCurColour(Base.Colours.GREEN);
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3))
+        {
+            player.setCurColour(Base.Colours.BLUE);
+        }
+
         if(Gdx.input.isKeyJustPressed(Input.Keys.V)) { isDebug = !isDebug; }
     }
 
@@ -133,9 +192,12 @@ public class Play extends AbstractScreen {
     public void dispose() {
         super.dispose();
         world.dispose();
+        b2dr.dispose();
+        tileMap.dispose();
+        tmr.dispose();
     }
 
-    private void setupLevel()
+    private void initLevel()
     {
         tileMap = new TmxMapLoader().load("levels/level" + levelNumber + ".tmx");
         tmr = new OrthogonalTiledMapRenderer(tileMap);
@@ -150,7 +212,15 @@ public class Play extends AbstractScreen {
 
         MapLayer boundaryLayer = tileMap.getLayers().get("BOUNDARY");
         PolylineMapObject polylineObj = (PolylineMapObject)boundaryLayer.getObjects().get(0);
-        buildBoundary(polylineObj);
+        initBoundary(polylineObj, "BOUNDARY", false);
+
+        boundaryLayer = tileMap.getLayers().get("FAILBOUNDARY");
+        polylineObj = (PolylineMapObject)boundaryLayer.getObjects().get(0);
+        initBoundary(polylineObj, "FAILBOUNDARY", true);
+
+        boundaryLayer = tileMap.getLayers().get("PASSBOUNDARY");
+        polylineObj = (PolylineMapObject)boundaryLayer.getObjects().get(0);
+        initBoundary(polylineObj, "PASSBOUNDARY", true);
 
         MapLayer playerLayer = tileMap.getLayers().get("PLAYER");
         TextureMapObject playerObj = (TextureMapObject)playerLayer.getObjects().get(0);
@@ -165,24 +235,20 @@ public class Play extends AbstractScreen {
                 if(cell == null) { continue; }
                 if(cell.getTile() == null) { continue; }
 
-                if(cell.getTile().getId() == 1) { platforms.add(new Platform(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y),  Base.Colours.RED)); }
-                else if(cell.getTile().getId() == 2) { platforms.add(new Platform(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.GREEN)); }
-                else if(cell.getTile().getId() == 3) { platforms.add(new Platform(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.BLUE)); }
+                if(cell.getTile().getId() == 1) { platforms.add(new Platform(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y),  Base.Colours.RED, Vars.BIT_RED, Vars.BIT_PLAYER)); }
+                else if(cell.getTile().getId() == 2) { platforms.add(new Platform(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.GREEN, Vars.BIT_GREEN, Vars.BIT_PLAYER)); }
+                else if(cell.getTile().getId() == 3) { platforms.add(new Platform(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.BLUE, Vars.BIT_BLUE, Vars.BIT_PLAYER)); }
             }
         }
     }
 
-    private void buildBoundary(PolylineMapObject polylineObj)
+    private void initBoundary(PolylineMapObject polylineObj, String userData, boolean isSensor)
     {
         Polyline r = polylineObj.getPolyline();
         BodyDef bd = new BodyDef();
         bd.type = BodyDef.BodyType.StaticBody;
 
         Body body = world.createBody(bd);
-
-        FixtureDef fd = new FixtureDef();
-
-        ChainShape chain = new ChainShape();
 
         float[] v = r.getTransformedVertices();
         Vector2[] finalV = new Vector2[v.length / 2];
@@ -194,10 +260,58 @@ public class Play extends AbstractScreen {
             finalV[i].y = v[i * 2 + 1] / PPM;
         }
 
-        chain.createChain(finalV);
-        fd.shape = chain;
+        Box2dUtils.makeChain(body, finalV, userData, isSensor, Vars.BIT_MISC, Vars.BIT_PLAYER);
+    }
 
-        body.createFixture(fd).setUserData("boundary");
+    private void initPauseWindow()
+    {
+        pauseWindow = new Window("Paused", skin);
+        pauseWindow.getTitleLabel().setPosition(350, 500);
+        pauseBackground = new Image(app.assets.get("textures/pauseBackground.png", Texture.class));
+        pauseWindow.setBackground(pauseBackground.getDrawable());
+        pauseWindow.setSize(700, 500);
+        pauseWindow.setPosition(280, 50);
+        pauseWindow.setVisible(false);
+
+        butContinue = new TextButton("Continue", skin, "default");
+        butContinue.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 240);
+        butContinue.setSize(buttonSize.x, buttonSize.y);
+        butContinue.addListener(new ClickListener() {
+            @Override
+            public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                isPaused = false;
+            }
+        });
+
+        butReset = new TextButton("Reset", skin, "default");
+        butReset.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 140);
+        butReset.setSize(buttonSize.x, buttonSize.y);
+        butReset.addListener(new ClickListener() {
+            @Override
+            public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setPlayScreen(levelNumber);
+            }
+        });
+
+        butExit = new TextButton("Exit", skin, "default");
+        butExit.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 40);
+        butExit.setSize(buttonSize.x, buttonSize.y);
+        butExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setScreen(ScreenManager.Screen.MENU);
+            }
+        });
+
+        pauseGlow = new Image(app.assets.get("textures/pauseGlow.png", Texture.class));
+        pauseGlow.setVisible(false);
+
+        pauseWindow.addActor(butContinue);
+        pauseWindow.addActor(butReset);
+        pauseWindow.addActor(butExit);
+
+        stage.addActor(pauseGlow);
+        stage.addActor(pauseWindow);
     }
 
     // Accessors
@@ -219,8 +333,25 @@ public class Play extends AbstractScreen {
             {
                 if(player.getCurAction() != Player.Action.IDLE) {
                     player.setAction(Player.Action.IDLE);
+                    return;
                 }
             }
+
+            if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("PASSBOUNDARY") ||
+                    fb.getUserData().equals("PLAYER") && fa.getUserData().equals("PASSBOUNDARY"))
+            {
+                isPaused = true;
+
+                return;
+            }
+
+            if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("FAILBOUNDARY") ||
+                    fb.getUserData().equals("PLAYER") && fa.getUserData().equals("FAILBOUNDARY"))
+            {
+                isPaused = true;
+                return;
+            }
+
         }
 
         @Override

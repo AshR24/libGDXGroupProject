@@ -11,7 +11,6 @@ public abstract class Base {
     protected World world;
 
     // Physics definitions
-    protected BodyDef bd;
     protected Body body;
     protected String bodyType;
 

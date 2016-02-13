@@ -40,10 +40,10 @@ public class Loading extends AbstractScreen {
 
         loadFont("fonts/badaboom.TTF", 60, Color.BLACK);
 
-        app.assets.load("textures/player.png", Texture.class);
+        app.assets.load("textures/player_red.png", Texture.class);
         app.assets.finishLoading(); // make sure player texture and font is loaded
 
-        logo = app.assets.get("textures/player.png", Texture.class);
+        logo = app.assets.get("textures/player_red.png", Texture.class);
         loadingRect = new Rectangle(stage.getWidth() / 6f, (stage.getHeight() / 2f - 25), 0, 25);
 
         assetsToLoad();
@@ -100,9 +100,14 @@ public class Loading extends AbstractScreen {
         app.assets.load("textures/menuBackground.jpg", Texture.class);
         app.assets.load("textures/leaderboardBackground.jpg", Texture.class);
         app.assets.load("textures/levelSelectBackground.jpg", Texture.class);
+        app.assets.load("textures/pauseBackground.png", Texture.class);
+        app.assets.load("textures/pauseGlow.png", Texture.class);
         app.assets.load("textures/position0.png", Texture.class);
         app.assets.load("textures/position1.png", Texture.class);
         app.assets.load("textures/position2.png", Texture.class);
+
+        app.assets.load("textures/player_green.png", Texture.class);
+        app.assets.load("textures/player_blue.png", Texture.class);
 
         app.assets.load("sounds/jumping.mp3", Sound.class);
 

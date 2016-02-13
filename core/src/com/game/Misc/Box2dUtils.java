@@ -23,7 +23,7 @@ public class Box2dUtils {
         return world.createBody(bd);
     }
 
-    public static void makePolygon(Body body, Vector2 size, String userData, boolean isSensor)
+    public static void makePolygon(Body body, Vector2 size, String userData, boolean isSensor, short categoryBits, short maskBits)
     {
         FixtureDef fd = new FixtureDef();
 
@@ -34,13 +34,15 @@ public class Box2dUtils {
         fd.shape = shape;
         fd.density = density;
         fd.friction = friction;
+        fd.filter.categoryBits = categoryBits;
+        fd.filter.maskBits = maskBits;
         fd.isSensor = isSensor;
 
         if(userData.equals("")) { body.createFixture(fd); }
         else { body.createFixture(fd).setUserData(userData); }
     }
 
-    public static void makeCircle(Body body, float diameter, String userData, boolean isSensor)
+    public static void makeCircle(Body body, float diameter, String userData, boolean isSensor, short categoryBits, short maskBits)
     {
         FixtureDef fd = new FixtureDef();
 
@@ -49,13 +51,15 @@ public class Box2dUtils {
         fd.shape = shape;
         fd.density = density;
         fd.friction = friction;
+        fd.filter.categoryBits = categoryBits;
+        fd.filter.maskBits = maskBits;
         fd.isSensor = isSensor;
 
         if(userData.equals("")) { body.createFixture(fd); }
         else { body.createFixture(fd).setUserData(userData); }
     }
 
-    public static void makeChain(Body body, Vector2[] v, String userData, boolean isSensor)
+    public static void makeChain(Body body, Vector2[] v, String userData, boolean isSensor, short categoryBits, short maskBits)
     {
         FixtureDef fd = new FixtureDef();
 
@@ -64,6 +68,8 @@ public class Box2dUtils {
         fd.shape = shape;
         fd.density = density;
         fd.friction = friction;
+        fd.filter.categoryBits = categoryBits;
+        fd.filter.maskBits = maskBits;
         fd.isSensor = isSensor;
 
         if(userData.equals("")) { body.createFixture(fd); }
