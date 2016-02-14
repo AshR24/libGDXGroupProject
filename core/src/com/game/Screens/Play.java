@@ -69,6 +69,12 @@ public class Play extends AbstractScreen {
     private TextButton butContinue, butReset, butExit;
     private Vector2 buttonSize;
 
+    // Endgame window
+    private boolean isEnd;
+    private boolean isSuccess;
+    private Window endgameWindow;
+    private TextButton butNext;
+    private Image failureBackground, successBackground;
 
     private int levelNumber;
 
@@ -91,6 +97,9 @@ public class Play extends AbstractScreen {
 
         isPaused = false;
         buttonSize = new Vector2(50, 50);
+
+        isEnd = false;
+        isSuccess = false;
     }
 
     @Override
@@ -103,11 +112,12 @@ public class Play extends AbstractScreen {
 
         initLevel();
         initPauseWindow();
+        initEndgameWindow(false);
     }
 
     @Override
     public void update(float dt) {
-        if(!isPaused)
+        if(!isPaused && !isEnd)
         {
             world.step(dt, 6, 2);
 
@@ -125,6 +135,14 @@ public class Play extends AbstractScreen {
         {
             pauseWindow.setVisible(isPaused);
             pauseGlow.setVisible(isPaused);
+        }
+
+        if(endgameWindow.isVisible() != isEnd)
+        {
+            initEndgameWindow(isSuccess);
+
+            endgameWindow.setVisible(isEnd);
+            endgameWindow.setVisible(isEnd);
         }
 
         stage.act(dt);
@@ -314,6 +332,40 @@ public class Play extends AbstractScreen {
         stage.addActor(pauseWindow);
     }
 
+    private void initEndgameWindow(boolean success)
+    {
+        if (success) {
+            endgameWindow = new Window("Success", skin);
+            successBackground = new Image(app.assets.get("textures/successBackground.png", Texture.class));
+            endgameWindow.setBackground(successBackground.getDrawable());
+
+            butNext = new TextButton("Next", skin, "default");
+            butNext.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 240);
+            butNext.setSize(buttonSize.x, buttonSize.y);
+            butNext.addListener(new ClickListener() {
+                @Override
+                public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                    app.sm.setPlayScreen(levelNumber+1);
+                }
+            });
+            endgameWindow.addActor(butNext);
+        } else {
+            endgameWindow = new Window("Failure", skin);
+            failureBackground = new Image(app.assets.get("textures/failureBackground.png", Texture.class));
+            endgameWindow.setBackground(failureBackground.getDrawable());
+        }
+        endgameWindow.getTitleLabel().setPosition(350, 500);
+        endgameWindow.setSize(700, 500);
+        endgameWindow.setPosition(280, 50);
+        endgameWindow.setVisible(false);
+
+        endgameWindow.addActor(butReset);
+        endgameWindow.addActor(butExit);
+
+        stage.addActor(pauseGlow);
+        stage.addActor(endgameWindow);
+    }
+
     // Accessors
 
     // Mutators
@@ -340,7 +392,8 @@ public class Play extends AbstractScreen {
             if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("PASSBOUNDARY") ||
                     fb.getUserData().equals("PLAYER") && fa.getUserData().equals("PASSBOUNDARY"))
             {
-                isPaused = true;
+                isEnd = true;
+                isSuccess = true;
 
                 return;
             }
@@ -348,7 +401,8 @@ public class Play extends AbstractScreen {
             if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("FAILBOUNDARY") ||
                     fb.getUserData().equals("PLAYER") && fa.getUserData().equals("FAILBOUNDARY"))
             {
-                isPaused = true;
+                isEnd = true;
+                isSuccess = false;
                 return;
             }
 
