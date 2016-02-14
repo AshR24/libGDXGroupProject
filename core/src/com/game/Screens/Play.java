@@ -61,6 +61,12 @@ public class Play extends AbstractScreen {
     private Player player;
     private ArrayList<Platform> platforms = new ArrayList<Platform>();
 
+    // Intro window
+    private boolean isIntro;
+    private Window introWindow;
+    private Image introBackground;
+    private TextButton butProceed;
+
     // Pause window
     private boolean isPaused;
     private Window pauseWindow;
@@ -96,7 +102,9 @@ public class Play extends AbstractScreen {
         b2dCam = new OrthographicCamera();
         b2dCam.setToOrtho(false, Vars.SCREEN_WIDTH / PPM, Vars.SCREEN_HEIGHT / PPM);
 
+        isIntro = true;
         isPaused = false;
+
         buttonSize = new Vector2(50, 50);
 
         isEnd = false;
@@ -112,13 +120,14 @@ public class Play extends AbstractScreen {
         skin.load(Gdx.files.internal("spritesheets/uiskin.json"));
 
         initLevel();
+        initIntroWindow();
         initPauseWindow();
         initEndgameWindow(false);
     }
 
     @Override
     public void update(float dt) {
-        if(!isPaused && !isEnd)
+        if(!isPaused && !isEnd && !isIntro)
         {
             world.step(dt, 6, 2);
 
@@ -185,6 +194,7 @@ public class Play extends AbstractScreen {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
         {
+            isPaused = !isPaused;
             isPaused = !isPaused;
             System.out.println("isPaused: " + isPaused);
         }
@@ -283,6 +293,32 @@ public class Play extends AbstractScreen {
         }
 
         Box2dUtils.makeChain(body, finalV, userData, isSensor, Vars.BIT_MISC, Vars.BIT_PLAYER);
+    }
+
+    private void initIntroWindow()
+    {
+        introWindow = new Window("Level "+levelNumber, skin);
+        introWindow.getTitleLabel().setPosition(350, 500);
+        introBackground = new Image(app.assets.get("textures/level"+levelNumber+"Intro.png", Texture.class));
+        introWindow.setBackground(introBackground.getDrawable());
+        introWindow.setSize(700, 500);
+        introWindow.setPosition(280, 50);
+        introWindow.setVisible(true);
+
+        butProceed = new TextButton("PROCEED", skin, "default");
+        butProceed.setPosition((introWindow.getWidth() / 4) * 3, buttonSize.y + 360);
+        butProceed.setSize(buttonSize.x, buttonSize.y);
+        butProceed.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                introWindow.setVisible(false);
+                isIntro = false;
+            }
+        });
+
+        introWindow.addActor(butProceed);
+
+        stage.addActor(introWindow);
     }
 
     private void initPauseWindow()
