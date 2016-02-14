@@ -112,6 +112,7 @@ public class Loading extends AbstractScreen {
         app.assets.load("textures/player_blue.png", Texture.class);
 
         app.assets.load("sounds/jumping.mp3", Sound.class);
+        app.assets.load("sounds/colourchange.mp3", Sound.class);
 
         app.assets.load("music/TheComplex.mp3", Music.class);
     }

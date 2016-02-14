@@ -79,6 +79,7 @@ public class Play extends AbstractScreen {
     private int levelNumber;
 
     private Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jumping.mp3"));
+    private Sound colourchangeSound = Gdx.audio.newSound(Gdx.files.internal("sounds/colourchange.mp3"));
 
     public Play(App app, int levelNumber) {
         super(app);
@@ -178,7 +179,7 @@ public class Play extends AbstractScreen {
     public void handleInput() {
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
         {
-            //jumpSound.play(); //TODO, fix sound?
+            jumpSound.play();
             player.jump();
         }
 
@@ -190,16 +191,19 @@ public class Play extends AbstractScreen {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
         {
+            colourchangeSound.play();
             player.setCurColour(Base.Colours.RED);
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
         {
+            colourchangeSound.play();
             player.setCurColour(Base.Colours.GREEN);
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3))
         {
+            colourchangeSound.play();
             player.setCurColour(Base.Colours.BLUE);
         }
 
