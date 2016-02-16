@@ -1,7 +1,9 @@
 package com.game.actor;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.game.App;
@@ -17,7 +19,7 @@ public class Player extends Base {
 
     Vector2 curVel;
 
-    private Texture texture;
+    private Sprite sprite;
 
     private Action curAction;
     public enum Action
@@ -38,7 +40,7 @@ public class Player extends Base {
         );
         Box2dUtils.makeCircle(body, size.x, "PLAYER", false, Vars.BIT_PLAYER, (short)(Vars.BIT_RED | Vars.BIT_MISC));
 
-        texture = App.assets.get("textures/player_red.png");
+        sprite = new Sprite(App.assets.get("textures/player_red.png", Texture.class));
     }
 
     public void update(float dt)
@@ -53,15 +55,14 @@ public class Player extends Base {
         curVel.x = Vars.SCROLLSPEED.x * dt;
         body.setLinearVelocity(curVel);
         pos = body.getPosition();
+
+        sprite.setPosition((pos.x * PPM)  - size.x / 2, (pos.y * PPM)  - size.y / 2);
+        sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
     }
 
     public void render(SpriteBatch sb)
     {
-        sb.draw(texture,
-                (pos.x * PPM) - size.x / 2,
-                (pos.y * PPM) - size.y / 2,
-                size.x,
-                size.y);
+        sprite.draw(sb);
     }
 
     public void jump()
@@ -90,26 +91,30 @@ public class Player extends Base {
             case RED:
                 bits &= ~Vars.BIT_GREEN;
                 bits &= ~Vars.BIT_BLUE;
+                bits &= ~Vars.BIT_YELLOW;
                 bits |= Vars.BIT_RED;
-                texture = App.assets.get("textures/player_red.png", Texture.class);
+                sprite.setTexture(App.assets.get("textures/player_red.png", Texture.class));
                 break;
             case GREEN:
                 bits &= ~Vars.BIT_RED;
                 bits &= ~Vars.BIT_BLUE;
+                bits &= ~Vars.BIT_YELLOW;
                 bits |= Vars.BIT_GREEN;
-                texture = App.assets.get("textures/player_green.png", Texture.class);
+                sprite.setTexture(App.assets.get("textures/player_green.png", Texture.class));
                 break;
             case BLUE:
                 bits &= ~Vars.BIT_RED;
                 bits &= ~Vars.BIT_GREEN;
+                bits &= ~Vars.BIT_YELLOW;
                 bits |= Vars.BIT_BLUE;
-                texture = App.assets.get("textures/player_blue.png", Texture.class);
+                sprite.setTexture(App.assets.get("textures/player_blue.png", Texture.class));
                 break;
             case YELLOW:
                 bits &= ~Vars.BIT_RED;
                 bits &= ~Vars.BIT_GREEN;
-                bits |= Vars.BIT_BLUE;
-                texture = App.assets.get("textures/player_yellow.png", Texture.class);
+                bits &= ~Vars.BIT_BLUE;
+                bits |= Vars.BIT_YELLOW;
+                sprite.setTexture(App.assets.get("textures/player_yellow.png", Texture.class));
                 break;
         }
 

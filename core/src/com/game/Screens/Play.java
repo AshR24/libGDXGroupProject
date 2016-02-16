@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
@@ -14,7 +15,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Polyline;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -64,26 +67,26 @@ public class Play extends AbstractScreen {
     private ArrayList<Platform> platforms = new ArrayList<Platform>();
 
     // Intro window
-    private boolean hasPlayedOnce = false;
     private boolean isIntro;
     private Window introWindow;
     private Image introBackground;
-    private TextButton butProceed;
 
     // Pause window
     private boolean isPaused;
     private Window pauseWindow;
     private Image pauseBackground;
     private Image pauseGlow;
-    private TextButton butContinue, butReset, butExit;
     private Vector2 buttonSize;
 
     // Endgame window
     private boolean isEnd;
     private boolean isSuccess;
     private Window endgameWindow;
-    private TextButton butNext;
     private Image failureBackground, successBackground;
+
+    // Progress bar
+    private float percent;
+    private Rectangle progressRect;
 
     private int levelNumber;
 
@@ -122,6 +125,8 @@ public class Play extends AbstractScreen {
         skin.add("default-font", app.assets.get("badaboom60.ttf", BitmapFont.class));
         skin.load(Gdx.files.internal("spritesheets/uiskin.json"));
 
+        progressRect = new Rectangle(stage.getWidth() - 550, (stage.getHeight() - 50), 0, 25);
+
         initLevel();
         initIntroWindow();
         initPauseWindow();
@@ -141,6 +146,11 @@ public class Play extends AbstractScreen {
             Vector2 start = new Vector2(cam.viewportWidth / 2, cam.viewportHeight / 2);
             CameraUtils.setBoundary(cam, start, new Vector2(mapWidth * tileSize.x - start.x * 2, mapHeight * tileSize.y - start.y * 2));
 
+            percent = Interpolation.linear.apply(percent, 500, 0.3f );
+            System.out.println(mapWidth - player.getPos().x);
+            progressRect.width = 0 + 500 * percent;
+            if (progressRect.width >= 499) { progressRect.width = 500; }
+
             player.update(dt);
         }
 
@@ -153,9 +163,8 @@ public class Play extends AbstractScreen {
         if(endgameWindow.isVisible() != isEnd)
         {
             initEndgameWindow(isSuccess);
-
             endgameWindow.setVisible(isEnd);
-            endgameWindow.setVisible(isEnd);
+            pauseGlow.setVisible(isEnd);
         }
 
         stage.act(dt);
@@ -178,6 +187,20 @@ public class Play extends AbstractScreen {
 
             tmr.setView(cam);
             tmr.render();
+
+            // HUD related
+            app.sb.setProjectionMatrix(hudCam.combined);
+
+            app.sr.begin(ShapeRenderer.ShapeType.Filled);
+            app.sr.setColor(1, 0, 0, 1);
+            app.sr.rect(progressRect.x, progressRect.y, progressRect.width, progressRect.height); // Red loading bar
+            app.sr.set(ShapeRenderer.ShapeType.Line);
+            app.sr.rect(progressRect.x, progressRect.y, 500f, progressRect.height); // Outline
+            app.sr.end();
+
+            app.sb.begin();
+            app.sb.draw(app.assets.get("spritesheets/platformSet.png", Texture.class), 100, 100);
+            app.sb.end();
         }
         else
         {
@@ -318,7 +341,7 @@ public class Play extends AbstractScreen {
         introWindow.setPosition(280, 50);
         introWindow.setVisible(true);
 
-        butProceed = new TextButton("PROCEED", skin, "default");
+        TextButton butProceed = new TextButton("PROCEED", skin, "default");
         butProceed.setPosition((introWindow.getWidth() / 4) * 3, buttonSize.y + 360);
         butProceed.setSize(buttonSize.x, buttonSize.y);
         butProceed.addListener(new ClickListener() {
@@ -332,11 +355,7 @@ public class Play extends AbstractScreen {
 
         introWindow.addActor(butProceed);
 
-
-        if(!hasPlayedOnce){
-            stage.addActor(introWindow);
-            hasPlayedOnce = true;
-        }
+        stage.addActor(introWindow);
     }
 
     private void initPauseWindow()
@@ -349,7 +368,7 @@ public class Play extends AbstractScreen {
         pauseWindow.setPosition(280, 50);
         pauseWindow.setVisible(false);
 
-        butContinue = new TextButton("Continue", skin, "default");
+        TextButton butContinue = new TextButton("Continue", skin, "default");
         butContinue.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 240);
         butContinue.setSize(buttonSize.x, buttonSize.y);
         butContinue.addListener(new ClickListener() {
@@ -359,7 +378,7 @@ public class Play extends AbstractScreen {
             }
         });
 
-        butReset = new TextButton("Reset", skin, "default");
+        TextButton butReset = new TextButton("Reset", skin, "default");
         butReset.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 140);
         butReset.setSize(buttonSize.x, buttonSize.y);
         butReset.addListener(new ClickListener() {
@@ -369,7 +388,7 @@ public class Play extends AbstractScreen {
             }
         });
 
-        butExit = new TextButton("Exit", skin, "default");
+        TextButton butExit = new TextButton("Exit", skin, "default");
         butExit.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 40);
         butExit.setSize(buttonSize.x, buttonSize.y);
         butExit.addListener(new ClickListener() {
@@ -397,7 +416,7 @@ public class Play extends AbstractScreen {
             successBackground = new Image(app.assets.get("textures/successBackground.png", Texture.class));
             endgameWindow.setBackground(successBackground.getDrawable());
 
-            butNext = new TextButton("Next", skin, "default");
+            TextButton butNext = new TextButton("Next", skin, "default");
             butNext.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 240);
             butNext.setSize(buttonSize.x, buttonSize.y);
             butNext.addListener(new ClickListener() {
@@ -417,10 +436,29 @@ public class Play extends AbstractScreen {
         endgameWindow.setPosition(280, 50);
         endgameWindow.setVisible(false);
 
+        TextButton butReset = new TextButton("Reset", skin, "default");
+        butReset.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 140);
+        butReset.setSize(buttonSize.x, buttonSize.y);
+        butReset.addListener(new ClickListener() {
+            @Override
+            public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setPlayScreen(levelNumber);
+            }
+        });
+
+        TextButton butExit = new TextButton("Exit", skin, "default");
+        butExit.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 40);
+        butExit.setSize(buttonSize.x, buttonSize.y);
+        butExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setScreen(ScreenManager.Screen.MENU);
+            }
+        });
+
         endgameWindow.addActor(butReset);
         endgameWindow.addActor(butExit);
 
-        stage.addActor(pauseGlow);
         stage.addActor(endgameWindow);
     }
 
@@ -452,7 +490,6 @@ public class Play extends AbstractScreen {
             {
                 isEnd = true;
                 isSuccess = true;
-
                 return;
             }
 

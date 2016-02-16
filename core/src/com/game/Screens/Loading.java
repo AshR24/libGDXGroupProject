@@ -52,6 +52,7 @@ public class Loading extends AbstractScreen {
     @Override
     public void update(float dt) {
         percent = Interpolation.linear.apply(percent, app.assets.getProgress(), 0.3f);
+        System.out.println("Loading...  " + app.assets.getProgress() * 100 + "%");
 
         loadingRect.width = 0 + 853.3333f * percent;
 
@@ -91,11 +92,12 @@ public class Loading extends AbstractScreen {
 
     private void assetsToLoad()
     {
+        // Fonts
         loadFont("fonts/badaboom.TTF", 25, Color.BLACK);
         loadFont("fonts/badaboom.TTF", 30, Color.BLACK);
         loadFont("fonts/badaboom.TTF", 45, Color.BLACK);
 
-
+        // Textures
         app.assets.load("textures/badlogic.jpg", Texture.class);
         app.assets.load("textures/menuBackground.jpg", Texture.class);
         app.assets.load("textures/leaderboardBackground.jpg", Texture.class);
@@ -103,21 +105,27 @@ public class Loading extends AbstractScreen {
         app.assets.load("textures/pauseBackground.png", Texture.class);
         app.assets.load("textures/failureBackground.png", Texture.class);
         app.assets.load("textures/successBackground.png", Texture.class);
-        app.assets.load("textures/level1Intro.png", Texture.class);
-        app.assets.load("textures/level2Intro.png", Texture.class);
         app.assets.load("textures/pauseGlow.png", Texture.class);
         app.assets.load("textures/position0.png", Texture.class);
         app.assets.load("textures/position1.png", Texture.class);
         app.assets.load("textures/position2.png", Texture.class);
-
+        for(int i = 1; i <= 10; i++)
+        {
+            app.assets.load("textures/level" + i + "Intro.png", Texture.class);
+        }
         app.assets.load("textures/player_green.png", Texture.class);
         app.assets.load("textures/player_blue.png", Texture.class);
         app.assets.load("textures/player_yellow.png", Texture.class);
 
+        // Spritesheets
+        app.assets.load("spritesheets/platformSet.png", Texture.class);
+
+        // Music
+        app.assets.load("music/TheComplex.mp3", Music.class);
+
+        // Sound
         app.assets.load("sounds/jumping.mp3", Sound.class);
         app.assets.load("sounds/colourchange.mp3", Sound.class);
-
-        app.assets.load("music/TheComplex.mp3", Music.class);
     }
 
     private void loadFont(String fontFileName, int size, Color borderColour)
