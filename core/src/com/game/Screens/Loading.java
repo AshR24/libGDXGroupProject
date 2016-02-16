@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.game.App;
 import com.game.managers.ScreenManager;
 

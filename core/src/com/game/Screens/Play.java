@@ -85,8 +85,10 @@ public class Play extends AbstractScreen {
     private Image failureBackground, successBackground;
 
     // Progress bar
-    private float percent;
     private Rectangle progressRect;
+    private Texture progressTexture;
+    private float percent;
+    private float progressX;
 
     private int levelNumber;
 
@@ -126,6 +128,7 @@ public class Play extends AbstractScreen {
         skin.load(Gdx.files.internal("spritesheets/uiskin.json"));
 
         progressRect = new Rectangle(stage.getWidth() - 550, (stage.getHeight() - 50), 0, 25);
+        progressTexture = app.assets.get("textures/player_red.png", Texture.class);
 
         initLevel();
         initIntroWindow();
@@ -146,10 +149,8 @@ public class Play extends AbstractScreen {
             Vector2 start = new Vector2(cam.viewportWidth / 2, cam.viewportHeight / 2);
             CameraUtils.setBoundary(cam, start, new Vector2(mapWidth * tileSize.x - start.x * 2, mapHeight * tileSize.y - start.y * 2));
 
-            percent = Interpolation.linear.apply(percent, 500, 0.3f );
-            System.out.println(mapWidth - player.getPos().x);
-            progressRect.width = 0 + 500 * percent;
-            if (progressRect.width >= 499) { progressRect.width = 500; }
+            percent = Interpolation.linear.apply(percent, (player.getPos().x * PPM) / (mapWidth * tileSize.x), 0.2f );
+            progressX = (progressRect.x + 500 * percent) - player.getSize().x / 2;
 
             player.update(dt);
         }
@@ -179,9 +180,9 @@ public class Play extends AbstractScreen {
         if(!isDebug)
         {
             app.sb.begin();
-            app.sb.draw(app.assets.get("textures/position0.png", Texture.class), cam.position.x - cam.viewportWidth / 2, cam.position.y - cam.viewportHeight / 2);
-            app.sb.draw(app.assets.get("textures/position1.png", Texture.class), cam.position.x - cam.viewportWidth / 2, cam.position.y - (cam.viewportHeight / 2) + 75);
-            app.sb.draw(app.assets.get("textures/position2.png", Texture.class), cam.position.x - cam.viewportWidth / 2, cam.position.y - (cam.viewportHeight / 2) - 150);
+            app.sb.draw(app.assets.get("textures/position0.png", Texture.class), (cam.position.x - cam.viewportWidth / 2), cam.position.y - cam.viewportHeight / 2);
+            app.sb.draw(app.assets.get("textures/position1.png", Texture.class), (cam.position.x - cam.viewportWidth / 2) * .1f, cam.position.y - (cam.viewportHeight / 2) + 75);
+            app.sb.draw(app.assets.get("textures/position2.png", Texture.class), (cam.position.x - cam.viewportWidth / 2) * .01f, cam.position.y - (cam.viewportHeight / 2) - 150);
             player.render(app.sb);
             app.sb.end();
 
@@ -199,7 +200,8 @@ public class Play extends AbstractScreen {
             app.sr.end();
 
             app.sb.begin();
-            app.sb.draw(app.assets.get("spritesheets/platformSet.png", Texture.class), 100, 100);
+            app.sb.draw(app.assets.get("spritesheets/platformSet.png", Texture.class), 100, (stage.getHeight() - 50));
+            app.sb.draw(progressTexture, progressX, progressRect.y, 30, 30);
             app.sb.end();
         }
         else
@@ -224,33 +226,34 @@ public class Play extends AbstractScreen {
             System.out.println("isPaused: " + isPaused);
         }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
+        if(!isPaused && !isEnd && !isIntro)
         {
-            if(!isPaused) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
+            {
                 colourchangeSound.play();
                 player.setCurColour(Base.Colours.RED);
+                progressTexture = app.assets.get("textures/player_red.png", Texture.class);
             }
-        }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
-        {
-            if(!isPaused) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
+            {
                 colourchangeSound.play();
                 player.setCurColour(Base.Colours.GREEN);
+                progressTexture = app.assets.get("textures/player_green.png", Texture.class);
             }
-        }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
-            if (!isPaused) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
                 colourchangeSound.play();
                 player.setCurColour(Base.Colours.BLUE);
+                progressTexture = app.assets.get("textures/player_blue.png", Texture.class);
             }
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4))
-        {
-            if(!isPaused) {
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4))
+            {
                 player.setCurColour(Base.Colours.YELLOW);
+                progressTexture = app.assets.get("textures/player_yellow.png", Texture.class);
             }
+
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.V)) { isDebug = !isDebug; }
@@ -490,6 +493,7 @@ public class Play extends AbstractScreen {
             {
                 isEnd = true;
                 isSuccess = true;
+                System.out.println("Success");
                 return;
             }
 
@@ -498,6 +502,7 @@ public class Play extends AbstractScreen {
             {
                 isEnd = true;
                 isSuccess = false;
+                System.out.println("Failure");
                 return;
             }
 
