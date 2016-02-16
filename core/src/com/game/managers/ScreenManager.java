@@ -20,6 +20,7 @@ public class ScreenManager {
         LEADERBOARD,
         LEVELSELECT,
         PLAY,
+        ENDLESSMODE
     }
 
     public ScreenManager(final App app)
@@ -34,6 +35,7 @@ public class ScreenManager {
         screens.put(Screen.MENU, new Menu(app));
         screens.put(Screen.LEADERBOARD, new Leaderboard(app));
         screens.put(Screen.LEVELSELECT, new LevelSelect(app));
+        screens.put(Screen.ENDLESSMODE, new EndlessMode(app));
     }
 
     public void setPlayScreen(int levelNumber)

@@ -100,6 +100,17 @@ public class LevelSelect extends AbstractScreen {
             }
         }
 
+        butEndless = new TextButton("Endless Mode", skin, "default");
+        butEndless.setPosition((stage.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 120);
+        butEndless.setSize(buttonSize.x, buttonSize.y);
+        butEndless.addListener(new ClickListener() {
+            @Override
+            public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setScreen(ScreenManager.Screen.ENDLESSMODE);
+            }
+        });
+
+        stage.addActor(butEndless);
         stage.addActor(butBack);
     }
 }
