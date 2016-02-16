@@ -216,6 +216,10 @@ public class Play extends AbstractScreen {
             colourchangeSound.play();
             player.setCurColour(Base.Colours.BLUE);
         }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4))
+        {
+            player.setCurColour(Base.Colours.YELLOW);
+        }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.V)) { isDebug = !isDebug; }
     }

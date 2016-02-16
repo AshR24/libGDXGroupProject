@@ -105,6 +105,12 @@ public class Player extends Base {
                 bits |= Vars.BIT_BLUE;
                 texture = App.assets.get("textures/player_blue.png", Texture.class);
                 break;
+            case YELLOW:
+                bits &= ~Vars.BIT_RED;
+                bits &= ~Vars.BIT_GREEN;
+                bits |= Vars.BIT_BLUE;
+                texture = App.assets.get("textures/player_yellow.png", Texture.class);
+                break;
         }
 
         filter.maskBits = bits;

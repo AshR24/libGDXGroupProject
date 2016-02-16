@@ -8,7 +8,7 @@
  </tileset>
  <layer name="PLATFORM" width="50" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2B4ACYK9TMSqQaGKTWLFECJeUxYMDJghmJk9aS4B5t55AJK9A60HZSmv6EIAF6cACk=
+   eJxjYBgFo2AUDBbAhIZBgBENEwPQ9WDDIMCMBWNzB8wtxNhFCSDWTkoBNj9TyyxKzRtKAACkFABW
   </data>
  </layer>
  <objectgroup name="PLAYER">

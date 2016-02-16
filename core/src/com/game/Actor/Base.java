@@ -24,6 +24,7 @@ public abstract class Base {
         RED,
         GREEN,
         BLUE,
+        YELLOW,
         NONE,
     }
 
