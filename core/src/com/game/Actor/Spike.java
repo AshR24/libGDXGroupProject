@@ -29,10 +29,9 @@ public class Spike extends Base {
                             new Vector2((-size.x / 2 + 5) / PPM, (size.y / 2 + 5) / PPM),
                             new Vector2((size.x / 2 - 5) / PPM, (size.y / 2 + 5) / PPM)
                     },
-                    "SPIKE",
+                    "SPIKES",
                     true,
-                    Vars.BIT_MISC,
-                    Vars.BIT_PLAYER
+                    Vars.BIT_MISC, maskBits
             );
     }
 }

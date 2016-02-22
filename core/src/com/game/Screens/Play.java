@@ -352,7 +352,7 @@ public class Play extends AbstractScreen {
     {
         introWindow = new Window("Level "+levelNumber, skin);
         introWindow.getTitleLabel().setPosition(350, 500);
-        introBackground = new Image(app.assets.get("textures/level1Intro.png", Texture.class));
+        introBackground = new Image(app.assets.get("textures/level" + levelNumber + "Intro.png", Texture.class));
         introWindow.setBackground(introBackground.getDrawable());
         introWindow.setSize(700, 500);
         introWindow.setPosition(280, 50);
