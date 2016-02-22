@@ -108,6 +108,7 @@ public class Loading extends AbstractScreen {
         app.assets.load("textures/position0.png", Texture.class);
         app.assets.load("textures/position1.png", Texture.class);
         app.assets.load("textures/position2.png", Texture.class);
+        app.assets.load("textures/Spikes.png", Texture.class);
         for(int i = 1; i <= 10; i++)
         {
             app.assets.load("textures/level" + i + "Intro.png", Texture.class);

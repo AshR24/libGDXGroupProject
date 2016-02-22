@@ -8,11 +8,11 @@
  </tileset>
  <layer name="PLATFORM" width="50" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUDARgIoAHC2AmgKkB0P2Oyy5GApge4YnL7pEIALMwAF8=
+   eJxjYBgFgwEwAzHjQDuCQsCExGZEwuiAGYoHIyAUB0wMqP4kxjxkM4n1NyVhRIr78JlBql9BAFeckwIGMn1QGnbU8P9AAHLiGgQAlYAAOA==
   </data>
  </layer>
  <objectgroup name="PLAYER">
-  <object id="24" gid="4" x="0" y="320" width="64" height="64"/>
+  <object id="24" gid="4" x="0" y="128" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="BOUNDARY">
   <object id="23" x="0" y="-192">
@@ -29,4 +29,5 @@
    <polyline points="0,0 0,640 128,640 128,0 0,0"/>
   </object>
  </objectgroup>
+ <objectgroup name="SPIKES"/>
 </map>

@@ -29,6 +29,7 @@ import com.game.actor.Base;
 import com.game.actor.Platform;
 import com.game.actor.Player;
 import com.game.App;
+import com.game.actor.Spike;
 import com.game.managers.ScreenManager;
 import com.game.misc.Box2dUtils;
 import com.game.misc.CameraUtils;
@@ -55,8 +56,6 @@ public class Play extends AbstractScreen {
     private OrthographicCamera b2dCam; // TODO, remove
 
     // TileMap and Map Renderer
-    private TiledMap tile1;
-    private TiledMap tile2;
     private TiledMap tileMap;
     private OrthogonalTiledMapRenderer tmr;
     private float mapWidth, mapHeight;
@@ -65,6 +64,7 @@ public class Play extends AbstractScreen {
     // All Actors in level
     private Player player;
     private ArrayList<Platform> platforms = new ArrayList<Platform>();
+    private ArrayList<Spike> spikes = new ArrayList<Spike>();
 
     // Intro window
     private boolean isIntro;
@@ -214,13 +214,7 @@ public class Play extends AbstractScreen {
 
     @Override
     public void handleInput() {
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
-        {
-            jumpSound.play();
-            player.jump();
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+                if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
         {
             isPaused = !isPaused;
             System.out.println("isPaused: " + isPaused);
@@ -254,6 +248,12 @@ public class Play extends AbstractScreen {
                 progressTexture = app.assets.get("textures/player_yellow.png", Texture.class);
             }
 
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
+            {
+                jumpSound.play();
+                player.jump();
+            }
+
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.V)) { isDebug = !isDebug; }
@@ -280,6 +280,7 @@ public class Play extends AbstractScreen {
 
 
         TiledMapTileLayer platformLayer = (TiledMapTileLayer)tileMap.getLayers().get("PLATFORM");
+        TiledMapTileLayer spikeLayer = (TiledMapTileLayer)tileMap.getLayers().get("SPIKES");
 
         MapLayer boundaryLayer = tileMap.getLayers().get("BOUNDARY");
         PolylineMapObject polylineObj = (PolylineMapObject)boundaryLayer.getObjects().get(0);
@@ -309,6 +310,19 @@ public class Play extends AbstractScreen {
                 if(cell.getTile().getId() == 1) { platforms.add(new Platform(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y),  Base.Colours.RED, Vars.BIT_RED, Vars.BIT_PLAYER)); }
                 else if(cell.getTile().getId() == 2) { platforms.add(new Platform(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.GREEN, Vars.BIT_GREEN, Vars.BIT_PLAYER)); }
                 else if(cell.getTile().getId() == 3) { platforms.add(new Platform(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.BLUE, Vars.BIT_BLUE, Vars.BIT_PLAYER)); }
+            }
+        }
+
+        for(int row = 0; row < spikeLayer.getHeight(); row++)
+        {
+            for(int col = 0; col < spikeLayer.getWidth(); col++)
+            {
+                TiledMapTileLayer.Cell cell = spikeLayer.getCell(col, row);
+
+                if(cell == null) { continue; }
+                if(cell.getTile() == null) { continue; }
+
+                if(cell.getTile().getId() == 0) { spikes.add(new Spike(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.RED, Vars.BIT_RED, Vars.BIT_PLAYER)); }
             }
         }
     }
