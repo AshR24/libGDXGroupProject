@@ -31,7 +31,7 @@ public class Spike extends Base {
                     },
                     "SPIKE",
                     true,
-                    Vars.BIT_MISC,
+                    Vars.BIT_PRISMATIC,
                     Vars.BIT_PLAYER
             );
     }

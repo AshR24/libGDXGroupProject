@@ -1,5 +1,7 @@
 package com.game.actor;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,6 +32,9 @@ public class Player extends Base {
         DEAD
     }
 
+    private Sound jumpSound;
+    private Sound colourchangeSound;
+
     public Player(World world, Vector2 pos, Vector2 size, Colours curColour) {
         super(world, pos, size, "", curColour);
         curAction = Action.IDLE;
@@ -38,7 +43,10 @@ public class Player extends Base {
                 BodyDef.BodyType.DynamicBody,
                 pos
         );
-        Box2dUtils.makeCircle(body, size.x, "PLAYER", false, Vars.BIT_PLAYER, (short)(Vars.BIT_RED | Vars.BIT_MISC));
+        Box2dUtils.makeCircle(body, size.x, "PLAYER", false, Vars.BIT_PLAYER, (short)(Vars.BIT_RED | Vars.BIT_PRISMATIC));
+
+        jumpSound = App.assets.get("sounds/jumping.mp3", Sound.class);
+        colourchangeSound = App.assets.get("sounds/colourchange.mp3", Sound.class);
 
         sprite = new Sprite(App.assets.get("textures/player_red.png", Texture.class));
     }
@@ -70,6 +78,7 @@ public class Player extends Base {
         if(curAction != Action.FALLING)
         {
             curAction = Action.JUMPING;
+            jumpSound.play();
         }
     }
 
@@ -120,5 +129,6 @@ public class Player extends Base {
 
         filter.maskBits = bits;
         body.getFixtureList().first().setFilterData(filter);
+        colourchangeSound.play();
     }
 }

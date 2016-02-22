@@ -27,7 +27,7 @@ public class Platform extends Base {
                 },
                 "PLATFORM",
                 true,
-                Vars.BIT_MISC,
+                Vars.BIT_PRISMATIC,
                 Vars.BIT_PLAYER
         );
     }

@@ -20,10 +20,7 @@ import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.game.actor.Base;
 import com.game.actor.Platform;
@@ -31,12 +28,11 @@ import com.game.actor.Player;
 import com.game.App;
 import com.game.actor.Spike;
 import com.game.managers.ScreenManager;
-import com.game.misc.Box2dUtils;
-import com.game.misc.CameraUtils;
-import com.game.misc.Vars;
+import com.game.misc.*;
+import com.game.misc.myWindow;
 
-import javax.xml.soap.Text;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.game.misc.Vars.PPM;
 
@@ -66,23 +62,18 @@ public class Play extends AbstractScreen {
     private ArrayList<Platform> platforms = new ArrayList<Platform>();
     private ArrayList<Spike> spikes = new ArrayList<Spike>();
 
-    // Intro window
-    private boolean isIntro;
-    private Window introWindow;
-    private Image introBackground;
+    // Windows
+    private HashMap<GameState, myWindow> windows = new HashMap<GameState, myWindow>();
 
-    // Pause window
-    private boolean isPaused;
-    private Window pauseWindow;
-    private Image pauseBackground;
-    private Image pauseGlow;
-    private Vector2 buttonSize;
-
-    // Endgame window
-    private boolean isEnd;
-    private boolean isSuccess;
-    private Window endgameWindow;
-    private Image failureBackground, successBackground;
+    private GameState curGameState;
+    public enum GameState
+    {
+        PLAYING,
+        INTRO,
+        PAUSED,
+        SUCCESS,
+        FAILURE,
+    }
 
     // Progress bar
     private Rectangle progressRect;
@@ -91,9 +82,6 @@ public class Play extends AbstractScreen {
     private float progressX;
 
     private int levelNumber;
-
-    private Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jumping.mp3"));
-    private Sound colourchangeSound = Gdx.audio.newSound(Gdx.files.internal("sounds/colourchange.mp3"));
 
     public Play(App app, int levelNumber) {
         super(app);
@@ -109,14 +97,6 @@ public class Play extends AbstractScreen {
 
         b2dCam = new OrthographicCamera();
         b2dCam.setToOrtho(false, Vars.SCREEN_WIDTH / PPM, Vars.SCREEN_HEIGHT / PPM);
-
-        isIntro = true;
-        isPaused = false;
-
-        buttonSize = new Vector2(50, 50);
-
-        isEnd = false;
-        isSuccess = false;
     }
 
     @Override
@@ -131,14 +111,16 @@ public class Play extends AbstractScreen {
         progressTexture = app.assets.get("textures/player_red.png", Texture.class);
 
         initLevel();
-        initIntroWindow();
-        initPauseWindow();
-        initEndgameWindow(false);
+        System.out.println("Finished initLevel");
+        initWindows();
+        System.out.println("Finished initWindows");
+        setCurGameState(GameState.INTRO);
     }
 
     @Override
     public void update(float dt) {
-        if(!isPaused && !isEnd && !isIntro)
+
+        if(curGameState == GameState.PLAYING)
         {
             world.step(dt, 6, 2);
 
@@ -153,19 +135,6 @@ public class Play extends AbstractScreen {
             progressX = (progressRect.x + 500 * percent) - player.getSize().x / 2;
 
             player.update(dt);
-        }
-
-        if(pauseWindow.isVisible() != isPaused)
-        {
-            pauseWindow.setVisible(isPaused);
-            pauseGlow.setVisible(isPaused);
-        }
-
-        if(endgameWindow.isVisible() != isEnd)
-        {
-            initEndgameWindow(isSuccess);
-            endgameWindow.setVisible(isEnd);
-            pauseGlow.setVisible(isEnd);
         }
 
         stage.act(dt);
@@ -214,30 +183,27 @@ public class Play extends AbstractScreen {
 
     @Override
     public void handleInput() {
-                if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-        {
-            isPaused = !isPaused;
-            System.out.println("isPaused: " + isPaused);
-        }
 
-        if(!isPaused && !isEnd && !isIntro)
+        if(curGameState == GameState.PLAYING)
         {
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
+            {
+                player.jump();
+            }
+
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
             {
-                colourchangeSound.play();
                 player.setCurColour(Base.Colours.RED);
                 progressTexture = app.assets.get("textures/player_red.png", Texture.class);
             }
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
             {
-                colourchangeSound.play();
                 player.setCurColour(Base.Colours.GREEN);
                 progressTexture = app.assets.get("textures/player_green.png", Texture.class);
             }
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
-                colourchangeSound.play();
                 player.setCurColour(Base.Colours.BLUE);
                 progressTexture = app.assets.get("textures/player_blue.png", Texture.class);
             }
@@ -247,16 +213,20 @@ public class Play extends AbstractScreen {
                 player.setCurColour(Base.Colours.YELLOW);
                 progressTexture = app.assets.get("textures/player_yellow.png", Texture.class);
             }
-
-            if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
-            {
-                jumpSound.play();
-                player.jump();
-            }
-
         }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.V)) { isDebug = !isDebug; }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+        {
+            if(curGameState == GameState.PAUSED) { setCurGameState(GameState.PLAYING); }
+            else { setCurGameState(GameState.PAUSED); }
+        }
+
+        if(curGameState == GameState.INTRO)
+        {
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) { setCurGameState(GameState.PLAYING); }
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.X)) { isDebug = !isDebug; }
     }
 
     @Override
@@ -313,7 +283,7 @@ public class Play extends AbstractScreen {
             }
         }
 
-        for(int row = 0; row < spikeLayer.getHeight(); row++)
+        /*for(int row = 0; row < spikeLayer.getHeight(); row++)
         {
             for(int col = 0; col < spikeLayer.getWidth(); col++)
             {
@@ -324,7 +294,7 @@ public class Play extends AbstractScreen {
 
                 if(cell.getTile().getId() == 0) { spikes.add(new Spike(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.RED, Vars.BIT_RED)); }
             }
-        }
+        }*/
     }
 
     private void initBoundary(PolylineMapObject polylineObj, String userData, boolean isSensor)
@@ -345,143 +315,108 @@ public class Play extends AbstractScreen {
             finalV[i].y = v[i * 2 + 1] / PPM;
         }
 
-        Box2dUtils.makeChain(body, finalV, userData, isSensor, Vars.BIT_MISC, Vars.BIT_PLAYER);
+        Box2dUtils.makeChain(body, finalV, userData, isSensor, Vars.BIT_PRISMATIC, Vars.BIT_PLAYER);
     }
 
-    private void initIntroWindow()
+    /**
+     * Method that creates the overlay windows for the intro, pause, sucess and failure states
+     */
+    private void initWindows()
     {
-        introWindow = new Window("Level "+levelNumber, skin);
-        introWindow.getTitleLabel().setPosition(350, 500);
-        introBackground = new Image(app.assets.get("textures/level1Intro.png", Texture.class));
-        introWindow.setBackground(introBackground.getDrawable());
-        introWindow.setSize(700, 500);
-        introWindow.setPosition(280, 50);
-        introWindow.setVisible(true);
+        Vector2 winPos = new Vector2(280, 50);
+        Vector2 winSize = new Vector2(700, 500);
 
-        TextButton butProceed = new TextButton("PROCEED", skin, "default");
-        butProceed.setPosition((introWindow.getWidth() / 4) * 3, buttonSize.y + 360);
-        butProceed.setSize(buttonSize.x, buttonSize.y);
-        butProceed.addListener(new ClickListener() {
+        windows.put(GameState.PLAYING, new myWindow("", new Vector2(0, 0), new Vector2(0, 0), skin, app.assets.get("textures/player_red.png", Texture.class)));
+        windows.put(GameState.INTRO, new myWindow("Level " + levelNumber, winPos, winSize, skin, app.assets.get("textures/level" + levelNumber + "Intro.png", Texture.class)));
+        windows.put(GameState.PAUSED, new myWindow("", winPos, winSize, skin, app.assets.get("textures/pauseBackground.png", Texture.class)));
+        windows.put(GameState.SUCCESS, new myWindow("", winPos, winSize, skin, app.assets.get("textures/successBackground.png", Texture.class)));
+        windows.put(GameState.FAILURE, new myWindow("", winPos, winSize, skin, app.assets.get("textures/failureBackground.png", Texture.class)));
+
+        // Init INTRO buttons
+        myWindow tempWindow = windows.get(GameState.INTRO);
+        tempWindow.addButton(new myButton("Continue", new Vector2((tempWindow.getX() * 2) - 5, tempWindow.getHeight() - 50), skin, "default", new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                introWindow.setVisible(false);
-                isIntro = false;
-                isPaused = false;
+                setCurGameState(GameState.PLAYING);
             }
-        });
+        }));
 
-        introWindow.addActor(butProceed);
-
-        stage.addActor(introWindow);
-    }
-
-    private void initPauseWindow()
-    {
-        pauseWindow = new Window("Paused", skin);
-        pauseWindow.getTitleLabel().setPosition(350, 500);
-        pauseBackground = new Image(app.assets.get("textures/pauseBackground.png", Texture.class));
-        pauseWindow.setBackground(pauseBackground.getDrawable());
-        pauseWindow.setSize(700, 500);
-        pauseWindow.setPosition(280, 50);
-        pauseWindow.setVisible(false);
-
-        TextButton butContinue = new TextButton("Continue", skin, "default");
-        butContinue.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 240);
-        butContinue.setSize(buttonSize.x, buttonSize.y);
-        butContinue.addListener(new ClickListener() {
+        // Init PAUSED buttons
+        tempWindow = windows.get(GameState.PAUSED);
+        tempWindow.addButton(new myButton("Continue", new Vector2((tempWindow.getX() / 2) - 25, 290), skin, "default", new ClickListener() {
             @Override
-            public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                isPaused = false;
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                setCurGameState(GameState.PLAYING);
             }
-        });
-
-        TextButton butReset = new TextButton("Reset", skin, "default");
-        butReset.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 140);
-        butReset.setSize(buttonSize.x, buttonSize.y);
-        butReset.addListener(new ClickListener() {
+        }));
+        tempWindow.addButton(new myButton("Reset", new Vector2((tempWindow.getX() / 2) - 25, 190), skin, "default", new ClickListener() {
             @Override
-            public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 app.sm.setPlayScreen(levelNumber);
             }
-        });
-
-        TextButton butExit = new TextButton("Exit", skin, "default");
-        butExit.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 40);
-        butExit.setSize(buttonSize.x, buttonSize.y);
-        butExit.addListener(new ClickListener() {
+        }));
+        tempWindow.addButton(new myButton("Exit", new Vector2((tempWindow.getX() / 2) - 25, 90), skin, "default", new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 app.sm.setScreen(ScreenManager.Screen.MENU);
             }
-        });
+        }));
 
-        pauseGlow = new Image(app.assets.get("textures/pauseGlow.png", Texture.class));
-        pauseGlow.setVisible(false);
+        // Init SUCCESS buttons
+        tempWindow = windows.get(GameState.SUCCESS);
+        tempWindow.addButton(new myButton("Continue", new Vector2((tempWindow.getX() / 2) - 25, 290), skin, "default", new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setPlayScreen(levelNumber + 1);
+            }
+        }));
+        tempWindow.addButton(new myButton("Reset", new Vector2((tempWindow.getX() / 2) - 25, 190), skin, "default", new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setPlayScreen(levelNumber);
+            }
+        }));
+        tempWindow.addButton(new myButton("Exit", new Vector2((tempWindow.getX() / 2) - 25, 90), skin, "default", new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setScreen(ScreenManager.Screen.MENU);
+            }
+        }));
 
-        pauseWindow.addActor(butContinue);
-        pauseWindow.addActor(butReset);
-        pauseWindow.addActor(butExit);
+        // Init FAILURE buttons
+        tempWindow = windows.get(GameState.FAILURE);
+        tempWindow.addButton(new myButton("Reset", new Vector2((tempWindow.getX() / 2) - 25, 190), skin, "default", new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setPlayScreen(levelNumber);
+            }
+        }));
+        tempWindow.addButton(new myButton("Exit", new Vector2((tempWindow.getX() / 2) - 25, 90), skin, "default", new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                app.sm.setScreen(ScreenManager.Screen.MENU);
+            }
+        }));
 
-        stage.addActor(pauseGlow);
-        stage.addActor(pauseWindow);
-    }
-
-    private void initEndgameWindow(boolean success)
-    {
-        if (success) {
-            endgameWindow = new Window("Success", skin);
-            successBackground = new Image(app.assets.get("textures/successBackground.png", Texture.class));
-            endgameWindow.setBackground(successBackground.getDrawable());
-
-            TextButton butNext = new TextButton("Next", skin, "default");
-            butNext.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 240);
-            butNext.setSize(buttonSize.x, buttonSize.y);
-            butNext.addListener(new ClickListener() {
-                @Override
-                public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                    app.sm.setPlayScreen(levelNumber+1);
-                }
-            });
-            endgameWindow.addActor(butNext);
-        } else {
-            endgameWindow = new Window("Failure", skin);
-            failureBackground = new Image(app.assets.get("textures/failureBackground.png", Texture.class));
-            endgameWindow.setBackground(failureBackground.getDrawable());
+        for(myWindow w : windows.values())
+        {
+            stage.addActor(w);
         }
-        endgameWindow.getTitleLabel().setPosition(350, 500);
-        endgameWindow.setSize(700, 500);
-        endgameWindow.setPosition(280, 50);
-        endgameWindow.setVisible(false);
-
-        TextButton butReset = new TextButton("Reset", skin, "default");
-        butReset.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 140);
-        butReset.setSize(buttonSize.x, buttonSize.y);
-        butReset.addListener(new ClickListener() {
-            @Override
-            public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                app.sm.setPlayScreen(levelNumber);
-            }
-        });
-
-        TextButton butExit = new TextButton("Exit", skin, "default");
-        butExit.setPosition((pauseWindow.getWidth() / 2) - buttonSize.x / 2, buttonSize.y + 40);
-        butExit.setSize(buttonSize.x, buttonSize.y);
-        butExit.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                app.sm.setScreen(ScreenManager.Screen.MENU);
-            }
-        });
-
-        endgameWindow.addActor(butReset);
-        endgameWindow.addActor(butExit);
-
-        stage.addActor(endgameWindow);
     }
 
     // Accessors
 
     // Mutators
+    private void setCurGameState(GameState newGameState)
+    {
+        if(curGameState != null) {
+            windows.get(curGameState).setVisible(false); // hide last window
+        }
+
+        curGameState = newGameState;
+        System.out.println("Showing: " + curGameState.name() + " window");
+        windows.get(curGameState).setVisible(true); // show new window
+    }
 
     // Contact Listener
     ContactListener cl = new ContactListener() {
@@ -502,33 +437,29 @@ public class Play extends AbstractScreen {
                 }
             }
 
+            if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("SPIKES") ||
+                    fb.getUserData().equals("PLAYER") && fa.getUserData().equals("SPIKES"))
+            {
+                setCurGameState(GameState.FAILURE);
+                System.out.println("FAILURE - TOUCHED SPIKE");
+                return;
+            }
+
             if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("PASSBOUNDARY") ||
                     fb.getUserData().equals("PLAYER") && fa.getUserData().equals("PASSBOUNDARY"))
             {
-                isEnd = true;
-                isSuccess = true;
-                System.out.println("Success");
+                setCurGameState(GameState.SUCCESS);
+                System.out.println("SUCCESS");
                 return;
             }
 
             if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("FAILBOUNDARY") ||
                     fb.getUserData().equals("PLAYER") && fa.getUserData().equals("FAILBOUNDARY"))
             {
-                isEnd = true;
-                isSuccess = false;
-                System.out.println("Failure");
+                setCurGameState(GameState.FAILURE);
+                System.out.println("FAILURE - TOUCHED FAILBOUNDARY");
                 return;
             }
-
-            if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("SPIKES") ||
-                    fb.getUserData().equals("PLAYER") && fa.getUserData().equals("SPIKES"))
-            {
-                isEnd = true;
-                isSuccess = false;
-                System.out.println("Failure");
-                return;
-            }
-
         }
 
         @Override

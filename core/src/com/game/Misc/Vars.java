@@ -22,10 +22,10 @@ public class Vars {
     public static final Vector2 SCROLLSPEED = new Vector2(150f, 0);
 
     // Filter bits
+    public static final short BIT_PLAYER = 1;
+    public static final short BIT_PRISMATIC = 1;
     public static final short BIT_RED = 2;
     public static final short BIT_GREEN = 4;
     public static final short BIT_BLUE = 8;
     public static final short BIT_YELLOW = 16;
-    public static final short BIT_PLAYER = 32;
-    public static final short BIT_MISC = 64;
 }

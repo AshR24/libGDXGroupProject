@@ -288,7 +288,7 @@ public class EndlessMode extends AbstractScreen {
             finalV[i].y = v[i * 2 + 1] / PPM;
         }
 
-        Box2dUtils.makeChain(body, finalV, userData, isSensor, Vars.BIT_MISC, Vars.BIT_PLAYER);
+        Box2dUtils.makeChain(body, finalV, userData, isSensor, Vars.BIT_PRISMATIC, Vars.BIT_PLAYER);
     }
 
     private void initIntroWindow() {
