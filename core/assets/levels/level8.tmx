@@ -32,7 +32,6 @@
    <polyline points="0,0 0,640 128,640 128,0 0,0"/>
   </object>
  </objectgroup>
- <objectgroup name="SPIKES"/>
  <layer name="SPIKES" width="50" height="8">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2AUUBOw0lnfKBhYMJLjDQAnTAAQ

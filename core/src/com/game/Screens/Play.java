@@ -323,6 +323,7 @@ public class Play extends AbstractScreen {
      */
     private void initWindows()
     {
+<<<<<<< HEAD
         Vector2 winPos = new Vector2(280, 50);
         Vector2 winSize = new Vector2(700, 500);
 
@@ -335,6 +336,20 @@ public class Play extends AbstractScreen {
         // Init INTRO buttons
         myWindow tempWindow = windows.get(GameState.INTRO);
         tempWindow.addButton(new myButton("Continue", new Vector2((tempWindow.getX() * 2) - 5, tempWindow.getHeight() - 50), skin, "default", new ClickListener() {
+=======
+        introWindow = new Window("Level "+levelNumber, skin);
+        introWindow.getTitleLabel().setPosition(350, 500);
+        introBackground = new Image(app.assets.get("textures/level" + levelNumber + "Intro.png", Texture.class));
+        introWindow.setBackground(introBackground.getDrawable());
+        introWindow.setSize(700, 500);
+        introWindow.setPosition(280, 50);
+        introWindow.setVisible(true);
+
+        TextButton butProceed = new TextButton("PROCEED", skin, "default");
+        butProceed.setPosition((introWindow.getWidth() / 4) * 3, buttonSize.y + 360);
+        butProceed.setSize(buttonSize.x, buttonSize.y);
+        butProceed.addListener(new ClickListener() {
+>>>>>>> origin/master
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 setCurGameState(GameState.PLAYING);
