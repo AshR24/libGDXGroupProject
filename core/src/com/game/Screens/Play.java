@@ -322,7 +322,7 @@ public class Play extends AbstractScreen {
                 if(cell == null) { continue; }
                 if(cell.getTile() == null) { continue; }
 
-                if(cell.getTile().getId() == 0) { spikes.add(new Spike(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.RED, Vars.BIT_RED, Vars.BIT_PLAYER)); }
+                if(cell.getTile().getId() == 0) { spikes.add(new Spike(world, new Vector2((col + 0.5f) * tileSize.x, (row + 0.5f) * tileSize.y), new Vector2(tileSize.x, tileSize.y), Base.Colours.RED, Vars.BIT_RED)); }
             }
         }
     }
@@ -513,6 +513,15 @@ public class Play extends AbstractScreen {
 
             if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("FAILBOUNDARY") ||
                     fb.getUserData().equals("PLAYER") && fa.getUserData().equals("FAILBOUNDARY"))
+            {
+                isEnd = true;
+                isSuccess = false;
+                System.out.println("Failure");
+                return;
+            }
+
+            if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("SPIKES") ||
+                    fb.getUserData().equals("PLAYER") && fa.getUserData().equals("SPIKES"))
             {
                 isEnd = true;
                 isSuccess = false;

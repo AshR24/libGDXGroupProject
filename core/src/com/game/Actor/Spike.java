@@ -11,15 +11,18 @@ import static com.game.misc.Vars.PPM;
 /**
  * Created by Elliot on 22/02/2016.
  */
+
 public class Spike extends Base {
 
-    public Spike(World world, Vector2 pos, Vector2 size, Colours curColour, short categoryBits, short maskBits) {
+    public Spike(World world, Vector2 pos, Vector2 size, Colours curColour, short categoryBits) {
             super(world, pos, size, "STATIC", curColour);
 
             body = Box2dUtils.makeBody(world,
                     BodyDef.BodyType.StaticBody,
                     pos
             );
+
+            short maskBits = 0;
             Box2dUtils.makePolygon(body, size, "", false, categoryBits, maskBits);
             Box2dUtils.makeChain(body,
                     new Vector2[]{

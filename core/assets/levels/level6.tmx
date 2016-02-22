@@ -6,9 +6,12 @@
  <tileset firstgid="4" name="player" tilewidth="64" tileheight="64" tilecount="1" columns="1">
   <image source="../textures/player_red.png" width="64" height="64"/>
  </tileset>
+ <tileset firstgid="5" name="spikes" tilewidth="64" tileheight="64" tilecount="1" columns="1">
+  <image source="../textures/spikes.png" width="64" height="64"/>
+ </tileset>
  <layer name="PLATFORM" width="50" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF2AAjFA8FwISE0cFg9gcjA373MWLB1AC4wopUwIyEKQFMDNjjENlcQuGA7A5GPGbispdUwMxAPf+TAmiRHkYB+QAA8XAAVA==
+   eJxjYBgFQx0wIeGhBBiRMCF5fOpIBdQKK2YkTAlgYsAeh8jmEgoHZHcw4jETl72kAmYG6vmfFECL9DAKyAcA3mgAUA==
   </data>
  </layer>
  <objectgroup name="PLAYER">
@@ -29,4 +32,9 @@
    <polyline points="0,0 0,640 128,640 128,0 0,0"/>
   </object>
  </objectgroup>
+ <layer name="SPIKES" width="50" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFwxmwQvFIB8SGwWhYjYJRQDwAAFKUABU=
+  </data>
+ </layer>
 </map>
