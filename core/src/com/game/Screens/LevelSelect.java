@@ -14,6 +14,8 @@ import com.game.misc.levelSelectClickListener;
 
 import java.util.ArrayList;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+
 /**
  * Created by Ash on 11/02/2016.
  */
@@ -107,6 +109,7 @@ public class LevelSelect extends AbstractScreen {
             @Override
             public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 //app.sm.setScreen(ScreenManager.Screen.ENDLESSMODE); TODO, finish this ;)
+                butEndless.addAction(forever(moveBy(20, 3)));
             }
         });
 

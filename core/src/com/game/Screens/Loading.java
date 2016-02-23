@@ -16,6 +16,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.game.App;
 import com.game.managers.ScreenManager;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * Created by Ash on 11/02/2016.
  */
@@ -131,6 +134,15 @@ public class Loading extends AbstractScreen {
         // Sound
         app.assets.load("sounds/jumping.mp3", Sound.class);
         app.assets.load("sounds/colourchange.mp3", Sound.class);
+        try {
+            FileWriter leaderboard = new FileWriter("Leaderboard.csv", true);
+
+            leaderboard.flush();
+            leaderboard.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void loadFont(String fontFileName, int size, Color borderColour)

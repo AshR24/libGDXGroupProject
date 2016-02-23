@@ -18,5 +18,6 @@ public class DesktopLauncher {
 		config.addIcon("spritesheets/icon.jpg", Files.FileType.Internal);
 		config.foregroundFPS = (int)Vars.FRAMERATE;
 		config.backgroundFPS = (int)Vars.FRAMERATE;
+		config.samples = 4;
 	}
 }

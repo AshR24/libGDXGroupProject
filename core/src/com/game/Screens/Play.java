@@ -35,6 +35,9 @@ import com.game.misc.utils.myWindow;
 import com.game.misc.utils.Box2dUtils;
 import com.game.misc.utils.CameraUtils;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -86,6 +89,10 @@ public class Play extends AbstractScreen {
     private float percent;
     private float progressX;
     private Image uiRedImage, uiGreenImage, uiBlueImage;
+
+    //Score
+    private int score = 0;
+    private float scoreYPos = 100;
 
     public Play(App app, int levelNumber) {
         super(app);
@@ -186,6 +193,7 @@ public class Play extends AbstractScreen {
             uiGreenImage.draw(app.sb, 1f);
             uiBlueImage.draw(app.sb, 1f);
             app.sb.draw(progressTexture, progressX, progressRect.y, 30, 30);
+            app.assets.get("badaboom60.ttf", BitmapFont.class).draw(app.sb, "Score: " + score, 500, scoreYPos);
             app.sb.end();
         }
         else
@@ -297,8 +305,8 @@ public class Play extends AbstractScreen {
             TextureMapObject tmo = (TextureMapObject)enemyObjs.get(i);
             MapProperties mp = tmo.getProperties();
 
-            if(mp.get("Colour").equals("RED")) { enemies.add(new Enemy(world, new Vector2(tmo.getX(), tmo.getY()), new Vector2(64, 64), Base.Colours.RED, BIT_ALL, BIT_PLAYER)); }
-            else if(mp.get("Colour").equals("GREEN")) { enemies.add(new Enemy(world, new Vector2(tmo.getX(), tmo.getY()), new Vector2(64, 64), Base.Colours.GREEN, BIT_ALL, BIT_PLAYER)); }
+            if(mp.get("Colour").equals("RED")) { enemies.add(new Enemy(world, new Vector2(tmo.getX() + 32, tmo.getY() + 32), new Vector2(64, 64), Base.Colours.RED, BIT_ALL, BIT_PLAYER)); }
+            else if(mp.get("Colour").equals("GREEN")) { enemies.add(new Enemy(world, new Vector2(tmo.getX() + 32, tmo.getY() + 32), new Vector2(64, 64), Base.Colours.GREEN, BIT_ALL, BIT_PLAYER)); }
             else if(mp.get("Colour").equals("BLUE")) { enemies.add(new Enemy(world, new Vector2(tmo.getX() + 32, tmo.getY() + 32), new Vector2(64, 64), Base.Colours.GREEN, BIT_ALL, BIT_PLAYER)); }
         }
 
@@ -356,7 +364,7 @@ public class Play extends AbstractScreen {
 
         // Init INTRO buttons
         myWindow tempWindow = windows.get(GameState.INTRO);
-        tempWindow.addButton(new myButton("Continue", new Vector2((tempWindow.getX() * 2) - 5, tempWindow.getHeight() - 50), skin, "default", new ClickListener() {
+        tempWindow.addButton(new myButton("Continue", new Vector2((tempWindow.getX() * 2) - 5, tempWindow.getHeight() - 50), skin, "intro", new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 setCurGameState(GameState.PLAYING);
@@ -438,6 +446,21 @@ public class Play extends AbstractScreen {
         curGameState = newGameState;
         System.out.println("Showing: " + curGameState.name() + " window");
         windows.get(curGameState).setVisible(true); // show new window
+        if(curGameState == GameState.SUCCESS){
+            scoreYPos = 650;
+
+            try {
+                FileWriter leaderboard = new FileWriter("Leaderboard.csv", true);
+
+                leaderboard.append("Level " + levelNumber + "," + score + ",\n");
+
+                leaderboard.flush();
+                leaderboard.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // Contact Listener
@@ -466,8 +489,12 @@ public class Play extends AbstractScreen {
                 {
                     if(e.getFixtures().contains(fa, false) || e.getFixtures().contains(fb, false))
                     {
-                        e.setAlive(false);
-                        e.setCurColour(e.getCurColour());
+                        if(e.isAlive()) {
+                            e.setAlive(false);
+                            e.setCurColour(e.getCurColour());
+                            score += 100;
+                            System.out.println(score);
+                        }
                     }
                 }
             }
@@ -475,6 +502,7 @@ public class Play extends AbstractScreen {
             if(fa.getUserData().equals("PLAYER") && fb.getUserData().equals("PASSBOUNDARY") ||
                     fb.getUserData().equals("PLAYER") && fa.getUserData().equals("PASSBOUNDARY"))
             {
+                score += 1000;
                 setCurGameState(GameState.SUCCESS);
                 System.out.println("SUCCESS");
                 return;

@@ -23,7 +23,7 @@
  </tileset>
  <layer name="PLATFORM" width="50" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFwx2wIGEmAniwAWS3kwKYkfBAA1LdTg4gNx5ZcGBscsQARjyYkDpK3YtNLSmAVLcQq45SgMvPgwEDALPDAS4=
+   eJxjYBgFwx2wIGEmAniwAWS3kwKYkfBAA1LdTg4gNx5ZcGBs8sQARjyYkDpquBddLSmAVLcQq45SgMvPgwEDAKszASo=
   </data>
  </layer>
  <objectgroup name="PLAYER">

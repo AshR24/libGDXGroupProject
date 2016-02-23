@@ -89,5 +89,9 @@ public class Enemy extends Base {
 
     public void setAlive(boolean isAlive) { this.isAlive = isAlive; }
 
+    public boolean isAlive(){
+        return isAlive;
+    }
+
     public Array<Fixture> getFixtures() { return body.getFixtureList(); }
 }
