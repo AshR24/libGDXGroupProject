@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="8" tilewidth="64" tileheight="64" nextobjectid="31">
- <tileset firstgid="1" name="platformSet" tilewidth="64" tileheight="64" tilecount="3" columns="3">
-  <image source="../spritesheets/platformSet.png" width="192" height="64"/>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="8" tilewidth="64" tileheight="64" nextobjectid="44">
+ <tileset firstgid="1" name="platformSet" tilewidth="64" tileheight="64" tilecount="4" columns="4">
+  <image source="../spritesheets/platformSet.png" width="256" height="64"/>
  </tileset>
- <tileset firstgid="4" name="player" tilewidth="64" tileheight="64" tilecount="1" columns="1">
-  <image source="../textures/player_red.png" width="64" height="64"/>
+ <tileset firstgid="5" name="player" tilewidth="64" tileheight="64" tilecount="1" columns="1">
+  <image source="../textures/player/player_red.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="6" name="enemies" tilewidth="64" tileheight="64" tilecount="3" columns="0">
+  <tile id="0">
+   <image width="64" height="64" source="../textures/enemies/blueAlive.png"/>
+  </tile>
+  <tile id="1">
+   <image width="64" height="64" source="../textures/enemies/greenAlive.png"/>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="Colour" value="RED"/>
+   </properties>
+   <image width="64" height="64" source="../textures/enemies/redAlive.png"/>
+  </tile>
  </tileset>
  <layer name="PLATFORM" width="50" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUDARgIoAHC2AmgKkB0P2Oyy5GApge4YnL7pEIALMwAF8=
+   eJxjYBgFo2AU4AKMBDATHkwI4NNLjH56AWYCmBoA3e+47GJBw9SMD2IBrrQwEgEAB58AgQ==
   </data>
  </layer>
  <objectgroup name="PLAYER">
-  <object id="24" gid="4" x="0" y="320" width="64" height="64"/>
+  <object id="24" gid="5" x="0" y="320" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="BOUNDARY">
   <object id="23" x="0" y="-192">
@@ -27,6 +41,58 @@
  <objectgroup name="PASSBOUNDARY">
   <object id="30" x="3200" y="-192">
    <polyline points="0,0 0,640 128,640 128,0 0,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="ENEMIES">
+  <object id="31" gid="6" x="1024" y="320" width="64" height="64">
+   <properties>
+    <property name="Colour" value="BLUE"/>
+   </properties>
+  </object>
+  <object id="32" gid="6" x="1152" y="320" width="64" height="64">
+   <properties>
+    <property name="Colour" value="BLUE"/>
+   </properties>
+  </object>
+  <object id="33" gid="6" x="1280" y="320" width="64" height="64">
+   <properties>
+    <property name="Colour" value="BLUE"/>
+   </properties>
+  </object>
+  <object id="34" gid="6" x="1408" y="320" width="64" height="64">
+   <properties>
+    <property name="Colour" value="BLUE"/>
+   </properties>
+  </object>
+  <object id="35" gid="6" x="2880" y="320" width="64" height="64">
+   <properties>
+    <property name="Colour" value="BLUE"/>
+   </properties>
+  </object>
+  <object id="36" gid="6" x="3008" y="320" width="64" height="64">
+   <properties>
+    <property name="Colour" value="BLUE"/>
+   </properties>
+  </object>
+  <object id="38" gid="7" x="1600" y="256" width="64" height="64">
+   <properties>
+    <property name="Colour" value="GREEN"/>
+   </properties>
+  </object>
+  <object id="41" gid="7" x="1728" y="256" width="64" height="64">
+   <properties>
+    <property name="Colour" value="GREEN"/>
+   </properties>
+  </object>
+  <object id="42" gid="7" x="768" y="256" width="64" height="64">
+   <properties>
+    <property name="Colour" value="GREEN"/>
+   </properties>
+  </object>
+  <object id="43" gid="7" x="576" y="256" width="64" height="64">
+   <properties>
+    <property name="Colour" value="GREEN"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

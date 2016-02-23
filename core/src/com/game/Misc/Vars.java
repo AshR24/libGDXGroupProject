@@ -23,9 +23,8 @@ public class Vars {
 
     // Filter bits
     public static final short BIT_PLAYER = 1;
-    public static final short BIT_PRISMATIC = 1;
+    public static final short BIT_ALL = 1;
     public static final short BIT_RED = 2;
     public static final short BIT_GREEN = 4;
     public static final short BIT_BLUE = 8;
-    public static final short BIT_YELLOW = 16;
 }

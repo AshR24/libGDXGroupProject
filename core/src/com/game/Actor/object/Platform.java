@@ -1,8 +1,9 @@
-package com.game.actor;
+package com.game.actor.object;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.game.misc.Box2dUtils;
+import com.game.actor.Base;
+import com.game.misc.utils.Box2dUtils;
 import com.game.misc.Vars;
 
 import static com.game.misc.Vars.PPM;
@@ -13,7 +14,7 @@ import static com.game.misc.Vars.PPM;
 public class Platform extends Base {
 
     public Platform(World world, Vector2 pos, Vector2 size, Colours curColour, short categoryBits, short maskBits) {
-        super(world, pos, size, "STATIC", curColour);
+        super(world, pos, size, curColour);
 
         body = Box2dUtils.makeBody(world,
                 BodyDef.BodyType.StaticBody,
@@ -27,7 +28,7 @@ public class Platform extends Base {
                 },
                 "PLATFORM",
                 true,
-                Vars.BIT_PRISMATIC,
+                Vars.BIT_ALL,
                 Vars.BIT_PLAYER
         );
     }

@@ -39,10 +39,10 @@ public class Loading extends AbstractScreen {
 
         loadFont("fonts/badaboom.TTF", 60, Color.BLACK);
 
-        app.assets.load("textures/player_red.png", Texture.class);
+        app.assets.load("textures/player/player_red.png", Texture.class);
         app.assets.finishLoading(); // make sure player texture and font is loaded
 
-        logo = app.assets.get("textures/player_red.png", Texture.class);
+        logo = app.assets.get("textures/player/player_red.png", Texture.class);
         loadingRect = new Rectangle(stage.getWidth() / 6f, (stage.getHeight() / 2f - 25), 0, 25);
 
         assetsToLoad();
@@ -97,25 +97,30 @@ public class Loading extends AbstractScreen {
         loadFont("fonts/badaboom.TTF", 45, Color.BLACK);
 
         // Textures
-        app.assets.load("textures/badlogic.jpg", Texture.class);
-        app.assets.load("textures/menuBackground.jpg", Texture.class);
-        app.assets.load("textures/leaderboardBackground.jpg", Texture.class);
-        app.assets.load("textures/levelSelectBackground.jpg", Texture.class);
-        app.assets.load("textures/pauseBackground.png", Texture.class);
-        app.assets.load("textures/failureBackground.png", Texture.class);
-        app.assets.load("textures/successBackground.png", Texture.class);
-        app.assets.load("textures/pauseGlow.png", Texture.class);
-        app.assets.load("textures/position0.png", Texture.class);
-        app.assets.load("textures/position1.png", Texture.class);
-        app.assets.load("textures/position2.png", Texture.class);
-        app.assets.load("textures/Spikes.png", Texture.class);
+        app.assets.load("textures/backgrounds/menuBackground.jpg", Texture.class);
+        app.assets.load("textures/backgrounds/leaderboardBackground.jpg", Texture.class);
+        app.assets.load("textures/backgrounds/levelSelectBackground.jpg", Texture.class);
+        app.assets.load("textures/backgrounds/pauseBackground.png", Texture.class);
+        app.assets.load("textures/backgrounds/failureBackground.png", Texture.class);
+        app.assets.load("textures/backgrounds/successBackground.png", Texture.class);
+        app.assets.load("textures/backgrounds/position0.png", Texture.class);
+        app.assets.load("textures/backgrounds/position1.png", Texture.class);
+        app.assets.load("textures/backgrounds/position2.png", Texture.class);
+
         for(int i = 1; i <= 10; i++)
         {
-            app.assets.load("textures/level" + i + "Intro.png", Texture.class);
+            app.assets.load("textures/intros/level" + i + "Intro.png", Texture.class);
         }
-        app.assets.load("textures/player_green.png", Texture.class);
-        app.assets.load("textures/player_blue.png", Texture.class);
-        app.assets.load("textures/player_yellow.png", Texture.class);
+        app.assets.load("textures/player/player_green.png", Texture.class);
+        app.assets.load("textures/player/player_blue.png", Texture.class);
+        app.assets.load("textures/player/player_yellow.png", Texture.class);
+
+        app.assets.load("textures/enemies/redAlive.png", Texture.class);
+        app.assets.load("textures/enemies/redDead.png", Texture.class);
+        app.assets.load("textures/enemies/greenAlive.png", Texture.class);
+        app.assets.load("textures/enemies/greenDead.png", Texture.class);
+        app.assets.load("textures/enemies/blueAlive.png", Texture.class);
+        app.assets.load("textures/enemies/blueDead.png", Texture.class);
 
         // Spritesheets
         app.assets.load("spritesheets/platformSet.png", Texture.class);

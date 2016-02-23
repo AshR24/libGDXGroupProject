@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="8" tilewidth="64" tileheight="64" nextobjectid="31">
- <tileset firstgid="1" name="platformSet" tilewidth="64" tileheight="64" tilecount="3" columns="3">
-  <image source="../spritesheets/platformSet.png" width="192" height="64"/>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="8" tilewidth="64" tileheight="64" nextobjectid="33">
+ <tileset firstgid="1" name="platformSet" tilewidth="64" tileheight="64" tilecount="4" columns="4">
+  <image source="../spritesheets/platformSet.png" width="256" height="64"/>
  </tileset>
- <tileset firstgid="4" name="player" tilewidth="64" tileheight="64" tilecount="1" columns="1">
-  <image source="../textures/player_red.png" width="64" height="64"/>
+ <tileset firstgid="5" name="player" tilewidth="64" tileheight="64" tilecount="1" columns="1">
+  <image source="../textures/player/player_red.png" width="64" height="64"/>
  </tileset>
- <tileset firstgid="5" name="spikes" tilewidth="64" tileheight="64" tilecount="1" columns="1">
-  <image source="../textures/spikes.png" width="64" height="64"/>
+ <tileset firstgid="6" name="enemies" tilewidth="64" tileheight="64" tilecount="3" columns="0">
+  <tile id="0">
+   <image width="64" height="64" source="../textures/enemies/blueAlive.png"/>
+  </tile>
+  <tile id="1">
+   <image width="64" height="64" source="../textures/enemies/greenAlive.png"/>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="Colour" value="RED"/>
+   </properties>
+   <image width="64" height="64" source="../textures/enemies/redAlive.png"/>
+  </tile>
  </tileset>
  <layer name="PLATFORM" width="50" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFgwEwAzHjQDuCQsCExGZEwuiAGYoHIyAUB0wMqP4kxjxkM4n1NyVhRIr78JlBql9BAFeckwIGMn1QGnbU8P9AAHLiGgQAlYAAOA==
+   eJxjYBgFgwEwAzHjQDuCQsCExGZBwuiAGYoHIyAUB0wMqP4kxjxkM4n1NyVhRIr78JlBql9BAN2/5ICBTB+Uhh01/D8QgJy4BgEAuIQAQQ==
   </data>
  </layer>
  <objectgroup name="PLAYER">
-  <object id="24" gid="4" x="0" y="128" width="64" height="64"/>
+  <object id="24" gid="5" x="0" y="128" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="BOUNDARY">
   <object id="23" x="0" y="-192">
@@ -32,9 +43,16 @@
    <polyline points="0,0 0,640 128,640 128,0 0,0"/>
   </object>
  </objectgroup>
- <layer name="SPIKES" width="50" height="8">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUUBOw0lnfKBhYMJLjDQAnTAAQ
-  </data>
- </layer>
+ <objectgroup name="ENEMIES">
+  <object id="31" gid="8" x="1088" y="256" width="64" height="64">
+   <properties>
+    <property name="Colour" value="RED"/>
+   </properties>
+  </object>
+  <object id="32" gid="8" x="2560" y="384" width="64" height="64">
+   <properties>
+    <property name="Colour" value="RED"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

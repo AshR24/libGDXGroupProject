@@ -61,7 +61,7 @@ public class Menu extends AbstractScreen {
         super.render(dt);
 
         app.sb.begin();
-        app.sb.draw(app.assets.get("textures/menuBackground.jpg", Texture.class), 0, 0);
+        app.sb.draw(app.assets.get("textures/backgrounds/menuBackground.jpg", Texture.class), 0, 0);
         app.sb.end();
 
         stage.draw();

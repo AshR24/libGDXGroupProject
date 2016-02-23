@@ -54,7 +54,7 @@ public class LevelSelect extends AbstractScreen {
         super.render(dt);
 
         app.sb.begin();
-        app.sb.draw(app.assets.get("textures/levelSelectBackground.jpg", Texture.class), 0, 0);
+        app.sb.draw(app.assets.get("textures/backgrounds/levelSelectBackground.jpg", Texture.class), 0, 0);
         app.sb.end();
 
         stage.draw();
@@ -106,7 +106,7 @@ public class LevelSelect extends AbstractScreen {
         butEndless.addListener(new ClickListener() {
             @Override
             public void clicked (com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                app.sm.setScreen(ScreenManager.Screen.ENDLESSMODE);
+                //app.sm.setScreen(ScreenManager.Screen.ENDLESSMODE); TODO, finish this ;)
             }
         });
 

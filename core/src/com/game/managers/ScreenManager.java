@@ -35,12 +35,11 @@ public class ScreenManager {
         screens.put(Screen.MENU, new Menu(app));
         screens.put(Screen.LEADERBOARD, new Leaderboard(app));
         screens.put(Screen.LEVELSELECT, new LevelSelect(app));
-        screens.put(Screen.ENDLESSMODE, new EndlessMode(app));
+        //screens.put(Screen.ENDLESSMODE, new EndlessMode(app));
     }
 
     public void setPlayScreen(int levelNumber)
     {
-
         // remove loaded level
         if(screens.get(Screen.PLAY) != null)
         {

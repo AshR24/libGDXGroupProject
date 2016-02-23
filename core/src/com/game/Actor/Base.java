@@ -12,7 +12,6 @@ public abstract class Base {
 
     // Physics definitions
     protected Body body;
-    protected String bodyType;
 
     // Position and Size
     protected Vector2 pos;
@@ -24,16 +23,14 @@ public abstract class Base {
         RED,
         GREEN,
         BLUE,
-        YELLOW,
-        NONE,
+        WHITE
     }
 
-    public Base(World world, Vector2 pos, Vector2 size, String bodyType, Colours curColour)
+    public Base(World world, Vector2 pos, Vector2 size, Colours curColour)
     {
         this.world = world;
         this.pos = pos;
         this.size = size;
-        this.bodyType = bodyType;
         this.curColour = curColour;
     }
 

@@ -50,7 +50,7 @@ public class Leaderboard extends AbstractScreen {
         super.render(dt);
 
         app.sb.begin();
-        app.sb.draw(app.assets.get("textures/leaderboardBackground.jpg", Texture.class), 0, 0);
+        app.sb.draw(app.assets.get("textures/backgrounds/leaderboardBackground.jpg", Texture.class), 0, 0);
         app.sb.end();
 
         stage.draw();

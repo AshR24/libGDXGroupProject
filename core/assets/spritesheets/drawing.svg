@@ -9,13 +9,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="256"
+   width="320"
    height="64"
-   viewBox="0 0 256 63.999999"
+   viewBox="0 0 320 63.999999"
    id="svg3336"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="drawing.svg">
+   sodipodi:docname="drawing.svg"
+   inkscape:export-filename="C:\Users\Ash\Documents\GitHub\libGDXGroupProject\core\assets\spritesheets\drawing.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs3338" />
   <sodipodi:namedview
@@ -25,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.8751698"
-     inkscape:cx="99.91327"
-     inkscape:cy="34.380608"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="178.30528"
+     inkscape:cy="42.385779"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -36,7 +39,8 @@
      inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     units="px" />
+     units="px"
+     showguides="false" />
   <metadata
      id="metadata3341">
     <rdf:RDF>
@@ -158,5 +162,27 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cccc" />
     </g>
+    <rect
+       y="988.36218"
+       x="256"
+       height="64"
+       width="64"
+       id="rect3466"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       ry="2.3579066" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       id="rect3468"
+       width="59.755768"
+       height="59.755768"
+       x="-317.8779"
+       y="-1050.2401"
+       transform="scale(-1,-1)" />
+    <path
+       style="fill:#cccccc;fill-opacity:1;stroke:none"
+       d="m 317.87788,1050.2401 -59.75577,0 c 59.75577,-59.75579 0,0 59.75577,-59.75579 z"
+       id="path3470"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
   </g>
 </svg>
