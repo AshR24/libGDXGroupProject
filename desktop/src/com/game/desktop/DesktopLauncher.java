@@ -19,5 +19,6 @@ public class DesktopLauncher {
 		config.foregroundFPS = (int)Vars.FRAMERATE;
 		config.backgroundFPS = (int)Vars.FRAMERATE;
 		config.samples = 4;
+		config.fullscreen = false;
 	}
 }
